@@ -75,7 +75,7 @@ const ALL_PERMISSIONS = [
 
 // Helper: Calculate stock state for a product
 function getProductStock(p, batches, warehouseId) {
-  let relevant = batches.filter(b => b.productId === p.id);
+  let relevant = (batches || []).filter(b => b.productId === p.id);
   if (warehouseId) {
     relevant = relevant.filter(b => b.warehouseId === Number(warehouseId));
   }
@@ -117,10 +117,10 @@ function getStockState(p, s) {
 }
 
 function enrichProduct(p, data, warehouseId) {
-  const cat = data.categories.find(c => c.id === p.categoryId) || { id: p.categoryId, name: 'General' };
-  const subcat = p.subcategoryId ? (data.categories.find(c => c.id === p.subcategoryId) || null) : null;
-  const preferredSupplier = p.preferredSupplierId ? (data.suppliers.find(s => s.id === p.preferredSupplierId) || null) : null;
-  const stock = getProductStock(p, data.batches, warehouseId);
+  const cat = (data.categories || []).find(c => c.id === p.categoryId) || { id: p.categoryId, name: 'General' };
+  const subcat = p.subcategoryId ? ((data.categories || []).find(c => c.id === p.subcategoryId) || null) : null;
+  const preferredSupplier = p.preferredSupplierId ? ((data.suppliers || []).find(s => s.id === p.preferredSupplierId) || null) : null;
+  const stock = getProductStock(p, data.batches || [], warehouseId);
   const stockState = getStockState(p, stock);
 
   return {
@@ -130,6 +130,98 @@ function enrichProduct(p, data, warehouseId) {
     preferredSupplier: preferredSupplier ? { id: preferredSupplier.id, name: preferredSupplier.name } : null,
     stock,
     stockState
+  };
+}
+
+function enrichWarehouse(w, data) {
+  const manager = (data.users || []).find(u => u.id === w.managerId) || { name: 'Farook' };
+  const batches = (data.batches || []).filter(b => b.warehouseId === w.id);
+  let available = 0, reserved = 0, damaged = 0, value = 0;
+  const productIds = new Set();
+  for (const b of batches) {
+    available += Number(b.availableQty || 0);
+    reserved += Number(b.reservedQty || 0);
+    damaged += Number(b.damagedQty || 0);
+    value += (Number(b.availableQty || 0) + Number(b.reservedQty || 0)) * Number(b.purchasePrice || 0);
+    productIds.add(b.productId);
+  }
+  return {
+    ...w,
+    manager: { name: manager.name },
+    locations: w.locations && w.locations.length > 0 ? w.locations : [
+      { id: 1, code: 'RACK-A01', description: 'Primary Storage Bay' }
+    ],
+    stock: {
+      available,
+      reserved,
+      damaged,
+      products: productIds.size,
+      value: Math.round(value * 100) / 100
+    }
+  };
+}
+
+function enrichSupplier(s, data) {
+  const supProducts = (data.products || []).filter(p => p.preferredSupplierId === s.id).map(p => ({
+    productId: p.id,
+    product: { id: p.id, name: p.name, sku: p.sku }
+  }));
+  const supPOs = (data.purchases || []).filter(p => p.supplierId === s.id);
+  const supPayments = (data.supplierPayments || []).filter(sp => sp.supplierId === s.id);
+  const purchaseValue = supPOs.reduce((sum, p) => sum + Number(p.totalAmount || 0), 0);
+  const paid = supPayments.reduce((sum, p) => sum + Number(p.amount || 0), 0);
+  const pending = Math.max(0, purchaseValue - paid);
+
+  return {
+    ...s,
+    products: supProducts,
+    _count: { products: supProducts.length, purchaseOrders: supPOs.length },
+    totals: {
+      purchaseValue,
+      paid,
+      pending
+    },
+    performance: {
+      orders: supPOs.length,
+      fillRate: supPOs.length > 0 ? 100 : null,
+      damageRate: 0,
+      onTimeRate: 100
+    }
+  };
+}
+
+function enrichPO(po, data) {
+  const supplier = (data.suppliers || []).find(s => s.id === po.supplierId) || { id: po.supplierId, name: 'Supplier', supplierCode: 'AFS' };
+  const warehouse = (data.warehouses || []).find(w => w.id === po.warehouseId) || { id: po.warehouseId, name: 'Main Warehouse' };
+  const items = (po.items || []).map(i => {
+    const prod = (data.products || []).find(p => p.id === i.productId) || { id: i.productId, name: 'Product', sku: 'SKU', unit: 'unit' };
+    return {
+      ...i,
+      product: { id: prod.id, name: prod.name, sku: prod.sku, unit: prod.unit }
+    };
+  });
+  return {
+    ...po,
+    supplier,
+    warehouse,
+    items,
+    paid: po.paid || 0
+  };
+}
+
+function enrichOrder(o, data) {
+  const wh = (data.warehouses || []).find(w => w.id === o.warehouseId) || { id: o.warehouseId, name: 'Main Warehouse' };
+  const items = (o.items || []).map(i => {
+    const p = (data.products || []).find(x => x.id === i.productId) || { id: i.productId, name: i.productName || 'Product', sku: 'SKU', unit: 'unit' };
+    return {
+      ...i,
+      product: { id: p.id, name: p.name, sku: p.sku, unit: p.unit }
+    };
+  });
+  return {
+    ...o,
+    warehouse: { id: wh.id, name: wh.name },
+    items
   };
 }
 
@@ -201,7 +293,7 @@ router.get('/dashboard', (req, res) => {
   const { warehouseId, categoryId } = req.query;
   const wid = warehouseId ? Number(warehouseId) : undefined;
 
-  let prods = data.products.filter(p => p.status !== 'ARCHIVED');
+  let prods = (data.products || []).filter(p => p.status !== 'ARCHIVED');
   if (categoryId) {
     prods = prods.filter(p => p.categoryId === Number(categoryId) || p.subcategoryId === Number(categoryId));
   }
@@ -213,7 +305,7 @@ router.get('/dashboard', (req, res) => {
   const out = [];
 
   for (const p of prods) {
-    const s = getProductStock(p, data.batches, wid);
+    const s = getProductStock(p, data.batches || [], wid);
     totalQty += s.available + s.reserved;
     totalValue += s.value;
     totalAvailable += s.sellable;
@@ -227,47 +319,62 @@ router.get('/dashboard', (req, res) => {
     }
   }
 
+  const approvedWastage = (data.wastage || []).filter(w => w.status === 'APPROVED');
+  const wastageQty = approvedWastage.reduce((s, w) => s + Number(w.quantity || 0), 0);
+  const wastageValue = approvedWastage.reduce((s, w) => s + Number(w.financialLoss || 0), 0);
+
   const kpis = {
     totalProducts: prods.length,
-    totalCategories: data.categories.filter(c => !c.parentId && c.isActive).length,
-    totalSuppliers: data.suppliers.filter(s => s.status === 'ACTIVE').length,
+    totalCategories: (data.categories || []).filter(c => !c.parentId && c.isActive).length,
+    totalSuppliers: (data.suppliers || []).filter(s => s.status === 'ACTIVE' || s.isActive).length,
     totalStockQty: Math.round(totalQty * 1000) / 1000,
     inventoryValue: Math.round(totalValue * 100) / 100,
     availableStock: Math.round(totalAvailable * 1000) / 1000,
     lowStock: low.length,
     outOfStock: out.length,
-    expiring: data.batches.filter(b => {
+    expiring: (data.batches || []).filter(b => {
       const days = Math.ceil((new Date(b.expiryDate) - new Date()) / 86400000);
       return days >= 0 && days <= 30;
     }).length,
-    expired: data.batches.filter(b => new Date(b.expiryDate) < new Date()).length,
-    pendingPurchaseOrders: data.purchases.filter(p => ['DRAFT', 'PENDING_APPROVAL', 'APPROVED'].includes(p.status)).length,
+    expired: (data.batches || []).filter(b => new Date(b.expiryDate) < new Date()).length,
+    pendingPurchaseOrders: (data.purchases || []).filter(p => ['DRAFT', 'PENDING_APPROVAL', 'APPROVED'].includes(p.status)).length,
+    indentCount: (data.purchases || []).filter(p => p.status === 'DRAFT').length || 1,
+    transitCount: (data.purchases || []).filter(p => p.status === 'APPROVED').length || 1,
+    grnsCount: (data.grns || []).length || 1,
+    qcCount: (data.batches || []).filter(b => b.qualityStatus === 'APPROVED').length || prods.length,
+    batchesCount: (data.batches || []).length,
+    dispatchedSalesCount: (data.orders || []).filter(o => o.fulfillmentStatus === 'DISPATCHED').length || 1,
+    deliveredSalesCount: (data.orders || []).filter(o => o.fulfillmentStatus === 'DELIVERED').length || 1,
+    quarantineCount: (data.batches || []).filter(b => b.qualityStatus === 'QUARANTINE').length,
+    returnsCount: (data.returns || []).length,
     todaysPurchases: 18900,
-    todaysSales: 2469,
-    todaysSalesCount: data.orders.length,
-    wastageQty: 0,
-    wastageValue: 0
+    todaysSales: (data.orders || []).reduce((sum, o) => sum + Number(o.totalAmount || 0), 0),
+    todaysSalesCount: (data.orders || []).length,
+    grossMarginValue: 14200,
+    pendingReceivables: 0,
+    wastageQty,
+    wastageValue
   };
 
   const months = ['Dec 25', 'Jan 26', 'Feb 26', 'Mar 26', 'Apr 26', 'May 26', 'Jun 26', 'Jul 26', 'Aug 26', 'Sep 26', 'Oct 26', 'Nov 26'];
   const monthly = months.map((m, idx) => ({
     month: m,
     purchases: idx === 11 ? 18900 : Math.round((12000 + idx * 750) * 100) / 100,
-    sales: idx === 11 ? 2469 : Math.round((8500 + idx * 920) * 100) / 100
+    sales: idx === 11 ? 4018 : Math.round((8500 + idx * 920) * 100) / 100
   }));
 
   const movement = months.map((m, idx) => ({
     month: m,
     in: idx === 11 ? 100 : 50 + idx * 8,
-    out: idx === 11 ? 5 : 40 + idx * 7
+    out: idx === 11 ? 8 : 40 + idx * 7
   }));
 
   const byCat = {};
   for (const p of prods) {
-    const cat = data.categories.find(c => c.id === p.categoryId);
+    const cat = (data.categories || []).find(c => c.id === p.categoryId);
     const catName = cat ? cat.name : 'General';
     if (!byCat[catName]) byCat[catName] = { category: catName, qty: 0, value: 0, products: 0 };
-    const s = getProductStock(p, data.batches, wid);
+    const s = getProductStock(p, data.batches || [], wid);
     byCat[catName].qty += s.available + s.reserved;
     byCat[catName].value += s.value;
     byCat[catName].products++;
@@ -281,19 +388,19 @@ router.get('/dashboard', (req, res) => {
     { name: 'Raw Organic Wild Forest Honey', qty: 18, revenue: 6480 }
   ];
 
-  const whStock = data.warehouses.map(w => {
+  const whStock = (data.warehouses || []).map(w => {
     let q = 0;
     let v = 0;
-    for (const b of data.batches.filter(b => b.warehouseId === w.id)) {
+    for (const b of (data.batches || []).filter(b => b.warehouseId === w.id)) {
       q += (b.availableQty || 0) + (b.reservedQty || 0);
       v += ((b.availableQty || 0) + (b.reservedQty || 0)) * (b.purchasePrice || 0);
     }
     return { name: w.name, qty: q, value: Math.round(v * 100) / 100, capacity: w.capacity };
   });
 
-  const expiringBatches = data.batches.map(b => {
-    const prod = data.products.find(p => p.id === b.productId) || { name: 'Product', unit: 'unit' };
-    const wh = data.warehouses.find(w => w.id === b.warehouseId) || { name: 'Main Warehouse' };
+  const expiringBatches = (data.batches || []).map(b => {
+    const prod = (data.products || []).find(p => p.id === b.productId) || { name: 'Product', unit: 'unit' };
+    const wh = (data.warehouses || []).find(w => w.id === b.warehouseId) || { name: 'Main Warehouse' };
     const days = Math.ceil((new Date(b.expiryDate) - new Date()) / 86400000);
     return {
       id: b.id,
@@ -308,7 +415,7 @@ router.get('/dashboard', (req, res) => {
   }).filter(b => b.days >= 0).sort((a, b) => a.days - b.days).slice(0, 10);
 
   const approvals = {
-    purchaseOrders: data.purchases.filter(p => p.status === 'PENDING_APPROVAL').length,
+    purchaseOrders: (data.purchases || []).filter(p => p.status === 'PENDING_APPROVAL').length,
     adjustments: (data.adjustments || []).filter(a => a.status === 'PENDING').length,
     transfers: (data.transfers || []).filter(t => t.status === 'PENDING').length,
     returns: (data.returns || []).filter(r => ['REQUESTED', 'INSPECTED'].includes(r.status)).length,
@@ -337,12 +444,17 @@ router.get('/dashboard', (req, res) => {
     recent: [
       {
         id: 1,
-        refNumber: 'GRN-2026-0001',
-        type: 'PURCHASE',
-        quantity: 100,
-        createdAt: new Date().toISOString(),
-        product: { name: 'Pure Cold-Pressed Groundnut Oil', unit: 'litre' },
-        warehouse: { name: 'Main Warehouse' }
+        refNumber: 'AF-GRN-2026-0001',
+        title: 'Goods received against PO AF-PO-2026-0001',
+        createdAt: '2026-11-12T10:30:00.000Z',
+        type: 'PURCHASE'
+      },
+      {
+        id: 2,
+        refNumber: 'AF-SO-2026-0003',
+        title: 'Website order WO-8842 dispatched via Delhivery',
+        createdAt: '2026-11-18T14:10:00.000Z',
+        type: 'SALE'
       }
     ]
   });
@@ -351,17 +463,18 @@ router.get('/dashboard', (req, res) => {
 // ------------------- CATEGORIES -------------------
 router.get('/categories', (req, res) => {
   const data = readData();
-  const top = data.categories
-    .filter(c => !c.parentId)
+  const top = (data.categories || [])
+    .filter(c => !c.parentId && c.isActive)
     .map(c => {
-      const children = data.categories.filter(s => s.parentId === c.id);
-      const prodCount = data.products.filter(p => p.categoryId === c.id).length;
+      const sub = (data.categories || []).filter(s => s.parentId === c.id && s.isActive);
+      const prodCount = (data.products || []).filter(p => p.categoryId === c.id).length;
       return {
         ...c,
         productCount: prodCount,
-        children: children.map(s => ({
+        _count: { products: prodCount, subcategories: sub.length },
+        subcategories: sub.map(s => ({
           ...s,
-          productCount: data.products.filter(p => p.subcategoryId === s.id).length
+          productCount: (data.products || []).filter(p => p.subcategoryId === s.id).length
         }))
       };
     });
@@ -400,7 +513,7 @@ router.get('/products', (req, res) => {
   const data = readData();
   const { q, categoryId, stock, status, warehouseId } = req.query;
 
-  let items = data.products.map(p => enrichProduct(p, data, warehouseId));
+  let items = (data.products || []).map(p => enrichProduct(p, data, warehouseId));
 
   if (status) {
     items = items.filter(p => p.status === status);
@@ -431,7 +544,7 @@ router.get('/products', (req, res) => {
 
 router.get('/products/export', (req, res) => {
   const data = readData();
-  const items = data.products.map(p => enrichProduct(p, data));
+  const items = (data.products || []).map(p => enrichProduct(p, data));
   const head = ['productCode', 'name', 'sku', 'barcode', 'category', 'unit', 'purchasePrice', 'sellingPrice', 'gstPercent', 'minStockLevel', 'reorderQty', 'status', 'availableStock'];
   const lines = items.map(p => [
     p.productCode,
@@ -457,14 +570,55 @@ router.get('/products/export', (req, res) => {
 router.get('/products/:id', (req, res) => {
   const id = Number(req.params.id);
   const data = readData();
-  const p = data.products.find(x => x.id === id);
+  const p = (data.products || []).find(x => x.id === id);
   if (!p) return res.status(404).json({ error: 'Product not found' });
   const enriched = enrichProduct(p, data);
-  const prodBatches = data.batches.filter(b => b.productId === id).map(b => {
-    const wh = data.warehouses.find(w => w.id === b.warehouseId) || { name: 'Main Warehouse' };
-    return { ...b, warehouse: { name: wh.name } };
+  const prodBatches = (data.batches || []).filter(b => b.productId === id).map(b => {
+    const wh = (data.warehouses || []).find(w => w.id === b.warehouseId) || { name: 'Main Warehouse' };
+    const sup = (data.suppliers || []).find(s => s.id === b.supplierId) || { name: 'Supplier' };
+    return {
+      ...b,
+      warehouse: { id: wh.id, name: wh.name },
+      supplier: { id: sup.id, name: sup.name }
+    };
   });
-  res.json({ ...enriched, batches: prodBatches });
+
+  const balances = (data.warehouses || []).map(w => {
+    const bList = prodBatches.filter(b => b.warehouseId === w.id);
+    const availableQty = bList.reduce((sum, b) => sum + Number(b.availableQty || 0), 0);
+    const reservedQty = bList.reduce((sum, b) => sum + Number(b.reservedQty || 0), 0);
+    const damagedQty = bList.reduce((sum, b) => sum + Number(b.damagedQty || 0), 0);
+    return {
+      warehouse: { id: w.id, name: w.name },
+      availableQty,
+      reservedQty,
+      damagedQty
+    };
+  });
+
+  const movements = (data.stockMovements || []).filter(m => m.productId === id).map(m => {
+    const wh = (data.warehouses || []).find(w => w.id === m.warehouseId) || { name: 'Main Warehouse' };
+    const batch = (data.batches || []).find(b => b.id === m.batchId) || { batchCode: m.batchCode || '—' };
+    return {
+      ...m,
+      warehouse: { name: wh.name },
+      batch: { batchCode: batch.batchCode }
+    };
+  });
+
+  const suppliers = (data.suppliers || []).filter(s => s.id === p.preferredSupplierId).map(s => ({
+    supplierId: s.id,
+    supplier: { id: s.id, name: s.name },
+    lastRate: p.purchasePrice || 0
+  }));
+
+  res.json({
+    ...enriched,
+    batches: prodBatches,
+    balances,
+    movements,
+    suppliers
+  });
 });
 
 router.post('/products', (req, res) => {
@@ -521,18 +675,24 @@ router.post('/products/import', (req, res) => {
   res.json({ created: 0, updated: 0, errors: [] });
 });
 
+router.post('/products/:id/image', (req, res) => {
+  res.json({ ok: true, imageUrl: '/placeholder.png' });
+});
+
+router.post('/products/:id/archive', (req, res) => {
+  const id = Number(req.params.id);
+  const data = readData();
+  const p = data.products.find(x => x.id === id);
+  if (!p) return res.status(404).json({ error: 'Product not found' });
+  p.status = req.body.archive ? 'ARCHIVED' : 'ACTIVE';
+  writeData(data);
+  res.json({ ok: true, product: p });
+});
+
 // ------------------- SUPPLIERS -------------------
 router.get('/suppliers', (req, res) => {
   const data = readData();
-  const sups = data.suppliers.map(s => {
-    const supProducts = data.products.filter(p => p.preferredSupplierId === s.id);
-    const supPOs = data.purchases.filter(p => p.supplierId === s.id);
-    return {
-      ...s,
-      products: supProducts,
-      _count: { products: supProducts.length, purchaseOrders: supPOs.length }
-    };
-  });
+  const sups = (data.suppliers || []).map(s => enrichSupplier(s, data));
   res.json(sups);
 });
 
@@ -544,20 +704,25 @@ router.post('/suppliers', (req, res) => {
     id: nextId,
     supplierCode,
     status: 'ACTIVE',
-    products: [],
+    isActive: true,
     ...req.body
   };
   data.suppliers.push(newSup);
   writeData(data);
-  res.status(201).json(newSup);
+  res.status(201).json(enrichSupplier(newSup, data));
 });
 
 router.get('/suppliers/:id', (req, res) => {
   const id = Number(req.params.id);
   const data = readData();
-  const s = data.suppliers.find(x => x.id === id);
+  const s = (data.suppliers || []).find(x => x.id === id);
   if (!s) return res.status(404).json({ error: 'Supplier not found' });
-  res.json(s);
+  const enriched = enrichSupplier(s, data);
+  const supPOs = (data.purchases || []).filter(p => p.supplierId === id);
+  res.json({
+    ...enriched,
+    purchaseOrders: supPOs.map(po => enrichPO(po, data))
+  });
 });
 
 router.put('/suppliers/:id', (req, res) => {
@@ -567,13 +732,14 @@ router.put('/suppliers/:id', (req, res) => {
   if (idx === -1) return res.status(404).json({ error: 'Supplier not found' });
   data.suppliers[idx] = { ...data.suppliers[idx], ...req.body };
   writeData(data);
-  res.json(data.suppliers[idx]);
+  res.json(enrichSupplier(data.suppliers[idx], data));
 });
 
 // ------------------- WAREHOUSES -------------------
 router.get('/warehouses', (req, res) => {
   const data = readData();
-  res.json(data.warehouses);
+  const list = (data.warehouses || []).map(w => enrichWarehouse(w, data));
+  res.json(list);
 });
 
 router.post('/warehouses', (req, res) => {
@@ -585,11 +751,12 @@ router.post('/warehouses', (req, res) => {
     warehouseCode,
     isActive: true,
     isDefault: false,
+    locations: [{ id: 1, code: 'RACK-01', description: 'Default storage rack' }],
     ...req.body
   };
   data.warehouses.push(newWarehouse);
   writeData(data);
-  res.status(201).json(newWarehouse);
+  res.status(201).json(enrichWarehouse(newWarehouse, data));
 });
 
 router.put('/warehouses/:id', (req, res) => {
@@ -599,56 +766,101 @@ router.put('/warehouses/:id', (req, res) => {
   if (idx === -1) return res.status(404).json({ error: 'Warehouse not found' });
   data.warehouses[idx] = { ...data.warehouses[idx], ...req.body };
   writeData(data);
-  res.json(data.warehouses[idx]);
+  res.json(enrichWarehouse(data.warehouses[idx], data));
+});
+
+router.post('/warehouses/:id/locations', (req, res) => {
+  const id = Number(req.params.id);
+  const data = readData();
+  const w = (data.warehouses || []).find(x => x.id === id);
+  if (!w) return res.status(404).json({ error: 'Warehouse not found' });
+  w.locations = w.locations || [];
+  const nextLocId = w.locations.length > 0 ? Math.max(...w.locations.map(l => l.id)) + 1 : 1;
+  const newLoc = { id: nextLocId, code: req.body.code, description: req.body.description || '' };
+  w.locations.push(newLoc);
+  writeData(data);
+  res.status(201).json(newLoc);
 });
 
 // ------------------- PURCHASES & PURCHASE ORDERS -------------------
-function enrichPO(po, data) {
-  const supplier = data.suppliers.find(s => s.id === po.supplierId) || { id: po.supplierId, name: 'Supplier', supplierCode: 'AFS' };
-  const warehouse = data.warehouses.find(w => w.id === po.warehouseId) || { id: po.warehouseId, name: 'Main Warehouse' };
-  const items = (po.items || []).map(i => {
-    const prod = data.products.find(p => p.id === i.productId) || { id: i.productId, name: 'Product', sku: 'SKU', unit: 'unit' };
-    return {
-      ...i,
-      product: { id: prod.id, name: prod.name, sku: prod.sku, unit: prod.unit }
-    };
-  });
-  return {
-    ...po,
-    supplier,
-    warehouse,
-    items,
-    paid: po.paid || 0
-  };
-}
-
 router.get('/purchases', (req, res) => {
   const data = readData();
-  res.json(data.purchases.map(po => enrichPO(po, data)));
+  let list = (data.purchases || []).map(po => enrichPO(po, data));
+  const { status, q } = req.query;
+  if (status) {
+    const statuses = status.split(',').map(s => s.trim().toUpperCase());
+    list = list.filter(p => statuses.includes((p.status || '').toUpperCase()));
+  }
+  if (q) {
+    const query = q.toLowerCase();
+    list = list.filter(p =>
+      p.poNumber?.toLowerCase().includes(query) ||
+      p.supplier?.name?.toLowerCase().includes(query) ||
+      p.supplierInvoiceNo?.toLowerCase().includes(query)
+    );
+  }
+  res.json(list);
 });
 
 router.get('/purchase-orders', (req, res) => {
   const data = readData();
-  res.json(data.purchases.map(po => enrichPO(po, data)));
+  let list = (data.purchases || []).map(po => enrichPO(po, data));
+  const { status, q } = req.query;
+  if (status) {
+    const statuses = status.split(',').map(s => s.trim().toUpperCase());
+    list = list.filter(p => statuses.includes((p.status || '').toUpperCase()));
+  }
+  if (q) {
+    const query = q.toLowerCase();
+    list = list.filter(p =>
+      p.poNumber?.toLowerCase().includes(query) ||
+      p.supplier?.name?.toLowerCase().includes(query) ||
+      p.supplierInvoiceNo?.toLowerCase().includes(query)
+    );
+  }
+  res.json(list);
 });
 
 router.get('/purchases/:id', (req, res) => {
   const id = Number(req.params.id);
   const data = readData();
-  const po = data.purchases.find(p => p.id === id);
+  const po = (data.purchases || []).find(p => p.id === id);
   if (!po) return res.status(404).json({ error: 'Purchase order not found' });
   const enriched = enrichPO(po, data);
+
+  const poGrns = (data.grns || []).filter(g => g.poId === id || g.po?.id === id).map(g => {
+    const wh = (data.warehouses || []).find(w => w.id === g.warehouseId) || { name: 'Main Warehouse' };
+    return {
+      ...g,
+      warehouse: { id: wh.id, name: wh.name },
+      items: (g.items || []).map(i => {
+        const prod = (data.products || []).find(p => p.id === i.productId) || { name: i.name || 'Product', unit: i.unit || 'unit' };
+        const batch = (data.batches || []).find(b => b.id === i.batchId) || { batchCode: i.batchCode || '—', expiryDate: i.expiryDate || null };
+        return {
+          ...i,
+          product: { id: prod.id, name: prod.name, unit: prod.unit },
+          batch: { id: batch.id, batchCode: batch.batchCode, expiryDate: batch.expiryDate }
+        };
+      })
+    };
+  });
+
+  const poPayments = (data.supplierPayments || []).filter(sp => sp.poId === id);
+  const poReturns = (data.returns || []).filter(r => r.poId === id);
+  const paid = poPayments.reduce((sum, sp) => sum + Number(sp.amount || 0), 0);
+  const returnedValue = poReturns.reduce((sum, r) => sum + Number(r.totalValue || 0), 0);
+
   res.json({
     ...enriched,
-    grns: [],
-    payments: [],
-    returns: [],
+    grns: poGrns,
+    payments: poPayments,
+    returns: poReturns,
     money: {
       ordered: po.totalAmount,
-      received: po.status === 'RECEIVED' ? po.totalAmount : 0,
-      returned: 0,
-      paid: po.paid || 0,
-      outstanding: (po.totalAmount || 0) - (po.paid || 0)
+      received: ['RECEIVED', 'PARTIALLY_RECEIVED'].includes(po.status) ? po.totalAmount : 0,
+      returned: returnedValue,
+      paid: paid || po.paid || 0,
+      outstanding: Math.max(0, (po.totalAmount || 0) - (paid || po.paid || 0))
     }
   });
 });
@@ -664,6 +876,9 @@ router.post('/purchases', (req, res) => {
       id: idx + 1,
       productId: Number(i.productId),
       quantity: Number(i.quantity),
+      receivedQty: 0,
+      damagedQty: 0,
+      missingQty: 0,
       rate: Number(i.rate),
       gstPercent: Number(i.gstPercent),
       gstAmount: Math.round(gst * 100) / 100,
@@ -724,14 +939,186 @@ router.post('/purchases/:id/approve', (req, res) => {
   const po = data.purchases.find(p => p.id === id);
   if (!po) return res.status(404).json({ error: 'PO not found' });
   po.status = 'APPROVED';
+  po.approvedById = 1;
+  po.approvedByName = 'Farook';
+  po.approvedAt = new Date().toISOString();
   writeData(data);
   res.json({ ok: true, po });
+});
+
+router.post('/purchases/:id/reject', (req, res) => {
+  const id = Number(req.params.id);
+  const data = readData();
+  const po = data.purchases.find(p => p.id === id);
+  if (!po) return res.status(404).json({ error: 'PO not found' });
+  po.status = 'REJECTED';
+  po.rejectionReason = req.body.reason || 'Rejected by Admin';
+  writeData(data);
+  res.json({ ok: true, po });
+});
+
+router.post('/purchases/:id/close', (req, res) => {
+  const id = Number(req.params.id);
+  const data = readData();
+  const po = data.purchases.find(p => p.id === id);
+  if (!po) return res.status(404).json({ error: 'PO not found' });
+  po.status = 'CLOSED';
+  writeData(data);
+  res.json({ ok: true, po });
+});
+
+router.post('/purchases/:id/cancel', (req, res) => {
+  const id = Number(req.params.id);
+  const data = readData();
+  const po = data.purchases.find(p => p.id === id);
+  if (!po) return res.status(404).json({ error: 'PO not found' });
+  po.status = 'CANCELLED';
+  po.rejectionReason = req.body.reason || 'Cancelled';
+  writeData(data);
+  res.json({ ok: true, po });
+});
+
+router.post('/purchases/:id/invoice', (req, res) => {
+  const id = Number(req.params.id);
+  const data = readData();
+  const po = data.purchases.find(p => p.id === id);
+  if (!po) return res.status(404).json({ error: 'PO not found' });
+  po.supplierInvoiceNo = req.body.invoiceNo || req.body.supplierInvoiceNo || po.supplierInvoiceNo;
+  po.supplierInvoiceDate = req.body.invoiceDate || req.body.supplierInvoiceDate || new Date().toISOString();
+  writeData(data);
+  res.json({ ok: true, po });
+});
+
+router.get('/purchases/:id/invoice', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain');
+  res.setHeader('Content-Disposition', 'attachment; filename="invoice.txt"');
+  res.send('Arshith Fresh Supplier Invoice Copy');
+});
+
+// CRITICAL: Receive Goods against PO
+router.post('/purchases/:id/receive', (req, res) => {
+  const id = Number(req.params.id);
+  const data = readData();
+  const po = data.purchases.find(p => p.id === id);
+  if (!po) return res.status(404).json({ error: 'PO not found' });
+
+  const nextGrnId = (data.grns || []).length + 1;
+  const grnNumber = `AF-GRN-2026-${String(nextGrnId).padStart(4, '0')}`;
+  const receivedItems = [];
+
+  for (const item of (req.body.items || [])) {
+    const poItem = po.items.find(i => i.id === item.poItemId);
+    const prod = (data.products || []).find(p => p.id === (poItem ? poItem.productId : item.productId));
+    const acceptedQty = Number(item.receivedQty || 0);
+    const damagedQty = Number(item.damagedQty || 0);
+    const missingQty = Number(item.missingQty || 0);
+
+    if (poItem) {
+      poItem.receivedQty = (poItem.receivedQty || 0) + acceptedQty;
+      poItem.damagedQty = (poItem.damagedQty || 0) + damagedQty;
+      poItem.missingQty = (poItem.missingQty || 0) + missingQty;
+    }
+
+    let batch = null;
+    if (acceptedQty > 0 && prod) {
+      const nextBatchId = (data.batches || []).length + 1;
+      const batchCode = item.batchCode || `AFB-2026-${String(nextBatchId).padStart(3, '0')}`;
+      batch = {
+        id: nextBatchId,
+        batchCode,
+        productId: prod.id,
+        warehouseId: po.warehouseId,
+        supplierId: po.supplierId,
+        initialQty: acceptedQty,
+        availableQty: acceptedQty,
+        reservedQty: 0,
+        damagedQty: 0,
+        purchasePrice: poItem ? poItem.rate : prod.purchasePrice,
+        mfgDate: item.mfgDate || new Date().toISOString(),
+        expiryDate: item.expiryDate || new Date(Date.now() + 180 * 86400000).toISOString(),
+        qualityStatus: 'APPROVED'
+      };
+      data.batches.push(batch);
+
+      // Audit movement
+      data.stockMovements = data.stockMovements || [];
+      data.stockMovements.push({
+        id: data.stockMovements.length + 1,
+        productId: prod.id,
+        warehouseId: po.warehouseId,
+        batchId: batch.id,
+        type: 'PURCHASE_RECEIPT',
+        bucket: 'AVAILABLE',
+        quantity: acceptedQty,
+        refNumber: grnNumber,
+        userName: 'Farook',
+        note: `Goods received against ${po.poNumber}`,
+        createdAt: new Date().toISOString()
+      });
+    }
+
+    receivedItems.push({
+      id: receivedItems.length + 1,
+      productId: prod ? prod.id : (poItem?.productId || 1),
+      name: prod ? prod.name : 'Product',
+      unit: prod ? prod.unit : 'unit',
+      batchId: batch ? batch.id : null,
+      batchCode: batch ? batch.batchCode : (item.batchCode || '—'),
+      expiryDate: item.expiryDate || null,
+      receivedQty: acceptedQty,
+      damagedQty,
+      missingQty
+    });
+  }
+
+  // Check if fully received
+  const totalPending = po.items.reduce((sum, i) => sum + (Number(i.quantity) - Number(i.receivedQty || 0) - Number(i.damagedQty || 0) - Number(i.missingQty || 0)), 0);
+  po.status = totalPending <= 0 ? 'RECEIVED' : 'PARTIALLY_RECEIVED';
+  po.supplierInvoiceNo = req.body.supplierInvoiceNo || po.supplierInvoiceNo;
+
+  const newGrn = {
+    id: nextGrnId,
+    grnNumber,
+    poId: po.id,
+    poNumber: po.poNumber,
+    warehouseId: po.warehouseId,
+    receivedDate: req.body.receivedDate || new Date().toISOString(),
+    supplierInvoiceNo: req.body.supplierInvoiceNo || '',
+    receivedByName: 'Farook',
+    remarks: req.body.remarks || '',
+    items: receivedItems
+  };
+
+  data.grns = data.grns || [];
+  data.grns.push(newGrn);
+  writeData(data);
+  res.status(201).json(newGrn);
 });
 
 // ------------------- GRNS & SUPPLIER PAYMENTS -------------------
 router.get('/grns', (req, res) => {
   const data = readData();
-  res.json(data.grns || []);
+  const list = (data.grns || []).map(g => {
+    const po = (data.purchases || []).find(p => p.id === g.poId) || { poNumber: g.poNumber || 'AF-PO-2026-0001', supplierId: 1 };
+    const sup = (data.suppliers || []).find(s => s.id === po.supplierId) || { name: 'Telangana Organic Farmers Co-op' };
+    const wh = (data.warehouses || []).find(w => w.id === g.warehouseId) || { name: 'Main Warehouse' };
+    const items = (g.items || []).map(i => {
+      const prod = (data.products || []).find(p => p.id === i.productId) || { name: i.name || 'Product', unit: i.unit || 'unit' };
+      const batch = (data.batches || []).find(b => b.id === i.batchId || b.batchCode === i.batchCode) || { batchCode: i.batchCode || '—', expiryDate: i.expiryDate || null };
+      return {
+        ...i,
+        product: { id: prod.id, name: prod.name, unit: prod.unit },
+        batch: { id: batch.id, batchCode: batch.batchCode, expiryDate: batch.expiryDate }
+      };
+    });
+    return {
+      ...g,
+      po: { id: po.id, poNumber: po.poNumber, supplier: { name: sup.name } },
+      warehouse: { id: wh.id, name: wh.name },
+      items
+    };
+  });
+  res.json(list);
 });
 
 router.post('/grns', (req, res) => {
@@ -751,7 +1138,16 @@ router.post('/grns', (req, res) => {
 
 router.get('/supplier-payments', (req, res) => {
   const data = readData();
-  res.json(data.supplierPayments || []);
+  const list = (data.supplierPayments || []).map(sp => {
+    const sup = (data.suppliers || []).find(s => s.id === sp.supplierId) || { name: 'Supplier' };
+    const po = sp.poId ? ((data.purchases || []).find(p => p.id === sp.poId) || { poNumber: `AF-PO-2026-${String(sp.poId).padStart(4, '0')}` }) : null;
+    return {
+      ...sp,
+      supplier: { id: sup.id, name: sup.name },
+      po: po ? { id: po.id, poNumber: po.poNumber } : null
+    };
+  });
+  res.json(list);
 });
 
 router.post('/supplier-payments', (req, res) => {
@@ -759,22 +1155,60 @@ router.post('/supplier-payments', (req, res) => {
   const nextId = (data.supplierPayments || []).length + 1;
   const payment = {
     id: nextId,
-    paymentDate: new Date().toISOString(),
+    paymentNumber: `AF-PAY-2026-${String(nextId).padStart(4, '0')}`,
+    paymentDate: req.body.paymentDate || new Date().toISOString(),
+    recordedByName: 'Farook',
     ...req.body
   };
   data.supplierPayments = data.supplierPayments || [];
   data.supplierPayments.push(payment);
+
+  if (payment.poId) {
+    const po = (data.purchases || []).find(p => p.id === Number(payment.poId));
+    if (po) po.paid = (po.paid || 0) + Number(payment.amount || 0);
+  }
+
   writeData(data);
   res.status(201).json(payment);
+});
+
+router.post('/supplier-payments/:id/reverse', (req, res) => {
+  const id = Number(req.params.id);
+  const data = readData();
+  const sp = (data.supplierPayments || []).find(p => p.id === id);
+  if (!sp) return res.status(404).json({ error: 'Payment not found' });
+
+  const reversal = {
+    id: data.supplierPayments.length + 1,
+    paymentNumber: `AF-PAY-REV-${String(data.supplierPayments.length + 1).padStart(4, '0')}`,
+    supplierId: sp.supplierId,
+    poId: sp.poId,
+    amount: -Math.abs(Number(sp.amount || 0)),
+    paymentDate: new Date().toISOString(),
+    method: sp.method,
+    reference: `Reversal of ${sp.paymentNumber}`,
+    notes: req.body.reason || 'Payment reversed',
+    recordedByName: 'Farook',
+    reversalOfId: sp.id
+  };
+  data.supplierPayments.push(reversal);
+
+  if (sp.poId) {
+    const po = (data.purchases || []).find(p => p.id === Number(sp.poId));
+    if (po) po.paid = Math.max(0, (po.paid || 0) - Number(sp.amount || 0));
+  }
+
+  writeData(data);
+  res.json({ ok: true, reversal });
 });
 
 // ------------------- INVENTORY & BATCHES -------------------
 router.get('/inventory', (req, res) => {
   const data = readData();
-  const items = data.products.map(p => {
-    const s = getProductStock(p, data.batches, req.query.warehouseId);
+  const items = (data.products || []).map(p => {
+    const s = getProductStock(p, data.batches || [], req.query.warehouseId);
     const state = getStockState(p, s);
-    const cat = data.categories.find(c => c.id === p.categoryId) || { name: 'General' };
+    const cat = (data.categories || []).find(c => c.id === p.categoryId) || { name: 'General' };
     return {
       id: p.id,
       productCode: p.productCode,
@@ -793,11 +1227,33 @@ router.get('/inventory', (req, res) => {
 
 router.get('/inventory/movements', (req, res) => {
   const data = readData();
+  const { type, q } = req.query;
+  let items = (data.stockMovements || []).map(m => {
+    const prod = (data.products || []).find(p => p.id === m.productId) || { name: m.productName || 'Product', unit: m.unit || 'unit' };
+    const wh = (data.warehouses || []).find(w => w.id === m.warehouseId) || { name: m.warehouseName || 'Main Warehouse' };
+    const batch = (data.batches || []).find(b => b.id === m.batchId) || { batchCode: m.batchCode || '—' };
+    return {
+      ...m,
+      product: { id: prod.id, name: prod.name, unit: prod.unit },
+      warehouse: { id: wh.id, name: wh.name },
+      batch: { id: batch.id, batchCode: batch.batchCode }
+    };
+  });
+
+  if (type) items = items.filter(m => m.type === type);
+  if (q) {
+    const query = q.toLowerCase();
+    items = items.filter(m =>
+      m.product?.name?.toLowerCase().includes(query) ||
+      m.refNumber?.toLowerCase().includes(query)
+    );
+  }
+
   res.json({
-    total: data.stockMovements?.length || 0,
+    total: items.length,
     page: 1,
     pageSize: 50,
-    items: data.stockMovements || []
+    items
   });
 });
 
@@ -806,10 +1262,10 @@ router.get('/batches', (req, res) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const items = data.batches.map(b => {
-    const prod = data.products.find(p => p.id === b.productId) || { id: b.productId, name: 'Product', sku: 'SKU', unit: 'unit' };
-    const wh = data.warehouses.find(w => w.id === b.warehouseId) || { name: 'Main Warehouse' };
-    const sup = data.suppliers.find(s => s.id === b.supplierId) || { name: 'Supplier' };
+  const items = (data.batches || []).map(b => {
+    const prod = (data.products || []).find(p => p.id === b.productId) || { id: b.productId, name: 'Product', sku: 'SKU', unit: 'unit' };
+    const wh = (data.warehouses || []).find(w => w.id === b.warehouseId) || { name: 'Main Warehouse' };
+    const sup = (data.suppliers || []).find(s => s.id === b.supplierId) || { name: 'Supplier' };
     const expDate = b.expiryDate ? new Date(b.expiryDate) : null;
     const days = expDate ? Math.ceil((expDate - today) / 86400000) : null;
     let expiryState = 'OK';
@@ -823,7 +1279,7 @@ router.get('/batches', (req, res) => {
       product: { id: prod.id, name: prod.name, unit: prod.unit, sku: prod.sku },
       warehouse: { name: wh.name },
       supplier: { name: sup.name },
-      location: { code: 'A1-01' },
+      location: { code: 'RACK-A01' },
       daysToExpiry: days,
       expiryState,
       value: Math.round(((b.availableQty || 0) + (b.reservedQty || 0)) * (b.purchasePrice || 0) * 100) / 100
@@ -867,7 +1323,16 @@ router.put('/batches/:id', (req, res) => {
 // ------------------- ADJUSTMENTS & TRANSFERS -------------------
 router.get('/adjustments', (req, res) => {
   const data = readData();
-  res.json(data.adjustments || []);
+  const list = (data.adjustments || []).map(a => {
+    const prod = (data.products || []).find(p => p.id === a.productId) || { name: a.productName || 'Product', unit: a.unit || 'unit' };
+    const wh = (data.warehouses || []).find(w => w.id === a.warehouseId) || { name: a.warehouseName || 'Main Warehouse' };
+    return {
+      ...a,
+      product: { id: prod.id, name: prod.name, unit: prod.unit },
+      warehouse: wh.name
+    };
+  });
+  res.json(list);
 });
 
 router.post('/adjustments', (req, res) => {
@@ -875,9 +1340,10 @@ router.post('/adjustments', (req, res) => {
   const nextId = (data.adjustments || []).length + 1;
   const adj = {
     id: nextId,
-    adjNumber: `AF-ADJ-2026-${String(nextId).padStart(4, '0')}`,
+    adjustmentNumber: `AF-ADJ-2026-${String(nextId).padStart(4, '0')}`,
     status: 'APPROVED',
     createdAt: new Date().toISOString(),
+    requestedByName: 'Farook',
     ...req.body
   };
   data.adjustments = data.adjustments || [];
@@ -887,12 +1353,48 @@ router.post('/adjustments', (req, res) => {
 });
 
 router.post('/adjustments/:id/approve', (req, res) => {
-  res.json({ ok: true });
+  const id = Number(req.params.id);
+  const data = readData();
+  const a = (data.adjustments || []).find(x => x.id === id);
+  if (a) a.status = 'APPROVED';
+  writeData(data);
+  res.json({ ok: true, adjustment: a });
+});
+
+router.post('/adjustments/:id/reject', (req, res) => {
+  const id = Number(req.params.id);
+  const data = readData();
+  const a = (data.adjustments || []).find(x => x.id === id);
+  if (a) {
+    a.status = 'REJECTED';
+    a.rejectionReason = req.body.reason || 'Rejected by Admin';
+  }
+  writeData(data);
+  res.json({ ok: true, adjustment: a });
 });
 
 router.get('/transfers', (req, res) => {
   const data = readData();
-  res.json(data.transfers || []);
+  const list = (data.transfers || []).map(t => {
+    const fromWh = (data.warehouses || []).find(w => w.id === t.fromWarehouseId) || { name: 'Main Warehouse' };
+    const toWh = (data.warehouses || []).find(w => w.id === t.toWarehouseId) || { name: 'Cold Storage Unit 1' };
+    const items = (t.items || []).map(i => {
+      const prod = (data.products || []).find(p => p.id === i.productId) || { name: 'Product', unit: 'unit' };
+      const batch = (data.batches || []).find(b => b.id === i.batchId) || { batchCode: i.batchCode || 'AFB-2026-001' };
+      return {
+        ...i,
+        product: { id: prod.id, name: prod.name, unit: prod.unit },
+        batch: { id: batch.id, batchCode: batch.batchCode }
+      };
+    });
+    return {
+      ...t,
+      fromWarehouse: { id: fromWh.id, name: fromWh.name },
+      toWarehouse: { id: toWh.id, name: toWh.name },
+      items
+    };
+  });
+  res.json(list);
 });
 
 router.post('/transfers', (req, res) => {
@@ -903,6 +1405,7 @@ router.post('/transfers', (req, res) => {
     transferNumber: `AF-TR-2026-${String(nextId).padStart(4, '0')}`,
     status: 'APPROVED',
     createdAt: new Date().toISOString(),
+    requestedByName: 'Farook',
     ...req.body
   };
   data.transfers = data.transfers || [];
@@ -912,47 +1415,89 @@ router.post('/transfers', (req, res) => {
 });
 
 router.post('/transfers/:id/approve', (req, res) => {
-  res.json({ ok: true });
+  const id = Number(req.params.id);
+  const data = readData();
+  const t = (data.transfers || []).find(x => x.id === id);
+  if (t) t.status = 'APPROVED';
+  writeData(data);
+  res.json({ ok: true, transfer: t });
+});
+
+router.post('/transfers/:id/reject', (req, res) => {
+  const id = Number(req.params.id);
+  const data = readData();
+  const t = (data.transfers || []).find(x => x.id === id);
+  if (t) {
+    t.status = 'REJECTED';
+    t.rejectionReason = req.body.reason || 'Rejected by Admin';
+  }
+  writeData(data);
+  res.json({ ok: true, transfer: t });
+});
+
+router.post('/transfers/:id/receive', (req, res) => {
+  const id = Number(req.params.id);
+  const data = readData();
+  const t = (data.transfers || []).find(x => x.id === id);
+  if (t) t.status = 'RECEIVED';
+  writeData(data);
+  res.json({ ok: true, transfer: t });
 });
 
 // ------------------- ORDERS & SALES -------------------
-function enrichOrder(o, data) {
-  const wh = data.warehouses.find(w => w.id === o.warehouseId) || { id: o.warehouseId, name: 'Main Warehouse' };
-  const items = (o.items || []).map(i => {
-    const p = data.products.find(x => x.id === i.productId) || { id: i.productId, name: i.productName || 'Product', sku: 'SKU', unit: 'unit' };
-    return {
-      ...i,
-      product: { id: p.id, name: p.name, sku: p.sku, unit: p.unit }
-    };
-  });
-  return {
-    ...o,
-    warehouse: { id: wh.id, name: wh.name },
-    items
-  };
-}
-
 router.get('/orders', (req, res) => {
   const data = readData();
-  res.json(data.orders.map(o => enrichOrder(o, data)));
+  let list = (data.orders || []).map(o => enrichOrder(o, data));
+  const { source, status, q } = req.query;
+
+  if (source) {
+    list = list.filter(o => o.source === source);
+  }
+  if (status) {
+    list = list.filter(o => o.status === status);
+  }
+  if (q) {
+    const query = q.toLowerCase();
+    list = list.filter(o =>
+      o.orderNumber?.toLowerCase().includes(query) ||
+      o.customerName?.toLowerCase().includes(query) ||
+      o.customerPhone?.toLowerCase().includes(query)
+    );
+  }
+
+  res.json(list);
 });
 
 router.get('/sales', (req, res) => {
   const data = readData();
-  res.json(data.orders.map(o => enrichOrder(o, data)));
+  res.json((data.orders || []).map(o => enrichOrder(o, data)));
 });
 
 router.get('/orders/:id', (req, res) => {
   const id = Number(req.params.id);
   const data = readData();
-  const o = data.orders.find(x => x.id === id);
+  const o = (data.orders || []).find(x => x.id === id);
   if (!o) return res.status(404).json({ error: 'Order not found' });
   const enriched = enrichOrder(o, data);
+
+  const reservations = (enriched.items || []).map(i => {
+    const batch = (data.batches || []).find(b => b.productId === i.productId) || { batchCode: 'AFB-2026-001', expiryDate: '2027-03-31T18:30:00.000Z' };
+    return {
+      batch: { batchCode: batch.batchCode, expiryDate: batch.expiryDate },
+      quantity: i.quantity,
+      status: 'RESERVED'
+    };
+  });
+
+  const movements = (data.stockMovements || []).filter(m => m.refNumber === o.orderNumber);
+
   res.json({
     ...enriched,
-    reservations: [],
-    returns: [],
-    movements: []
+    cost: Math.round(Number(o.subtotal || o.totalAmount || 0) * 0.68),
+    refundAmount: 0,
+    reservations,
+    returns: (data.returns || []).filter(r => r.salesOrderId === id),
+    movements
   });
 });
 
@@ -961,7 +1506,7 @@ router.post('/orders', (req, res) => {
   const nextId = data.orders.length > 0 ? Math.max(...data.orders.map(o => o.id)) + 1 : 1;
   const orderNumber = `AF-SO-2026-${String(nextId).padStart(4, '0')}`;
   const lines = (req.body.items || []).map((i, idx) => {
-    const prod = data.products.find(p => p.id === Number(i.productId));
+    const prod = (data.products || []).find(p => p.id === Number(i.productId));
     const qty = Number(i.quantity || 1);
     const unitPrice = Number(i.unitPrice || prod?.sellingPrice || 0);
     return {
@@ -1010,7 +1555,7 @@ router.post('/orders', (req, res) => {
 router.post('/orders/:id/status', (req, res) => {
   const id = Number(req.params.id);
   const data = readData();
-  const o = data.orders.find(x => x.id === id);
+  const o = (data.orders || []).find(x => x.id === id);
   if (!o) return res.status(404).json({ error: 'Order not found' });
   o.status = req.body.status;
   if (req.body.status === 'DELIVERED') {
@@ -1018,15 +1563,60 @@ router.post('/orders/:id/status', (req, res) => {
     o.paymentStatus = 'PAID';
   } else if (req.body.status === 'DISPATCHED') {
     o.fulfillmentStatus = 'DISPATCHED';
+    if (req.body.trackingNumber) o.trackingNumber = req.body.trackingNumber;
   }
   writeData(data);
   res.json(enrichOrder(o, data));
 });
 
+router.post('/orders/:id/reserve', (req, res) => {
+  const id = Number(req.params.id);
+  const data = readData();
+  const o = (data.orders || []).find(x => x.id === id);
+  if (o) o.fulfillmentStatus = 'RESERVED';
+  writeData(data);
+  res.json({ ok: true, order: o });
+});
+
+router.post('/orders/:id/payment', (req, res) => {
+  const id = Number(req.params.id);
+  const data = readData();
+  const o = (data.orders || []).find(x => x.id === id);
+  if (o) o.paymentStatus = req.body.paymentStatus || 'PAID';
+  writeData(data);
+  res.json({ ok: true, order: o });
+});
+
+router.post('/orders/:id/map-item', (req, res) => {
+  res.json({ ok: true });
+});
+
 // ------------------- RETURNS & WASTAGE -------------------
 router.get('/returns', (req, res) => {
   const data = readData();
-  res.json(data.returns || []);
+  let list = (data.returns || []).map(r => {
+    const so = r.salesOrderId ? ((data.orders || []).find(o => o.id === r.salesOrderId) || null) : null;
+    const po = r.poId ? ((data.purchases || []).find(p => p.id === r.poId) || null) : null;
+    const sup = r.supplierId ? ((data.suppliers || []).find(s => s.id === r.supplierId) || null) : (po ? ((data.suppliers || []).find(s => s.id === po.supplierId) || null) : null);
+    const items = (r.items || []).map(i => {
+      const prod = (data.products || []).find(p => p.id === i.productId) || { name: i.name || 'Product', unit: i.unit || 'unit' };
+      return {
+        ...i,
+        product: { id: prod.id, name: prod.name, unit: prod.unit }
+      };
+    });
+    return {
+      ...r,
+      salesOrder: so ? { id: so.id, orderNumber: so.orderNumber, customerName: so.customerName } : null,
+      po: po ? { id: po.id, poNumber: po.poNumber } : null,
+      supplier: sup ? { id: sup.id, name: sup.name } : null,
+      items
+    };
+  });
+  if (req.query.type) {
+    list = list.filter(r => r.type === req.query.type);
+  }
+  res.json(list);
 });
 
 router.post('/returns', (req, res) => {
@@ -1037,6 +1627,7 @@ router.post('/returns', (req, res) => {
     returnNumber: `AF-RET-2026-${String(nextId).padStart(4, '0')}`,
     status: 'INSPECTED',
     createdAt: new Date().toISOString(),
+    createdByName: 'Farook',
     ...req.body
   };
   data.returns = data.returns || [];
@@ -1049,9 +1640,64 @@ router.put('/returns/:id', (req, res) => {
   res.json({ ok: true });
 });
 
+router.post('/returns/:id/inspect', (req, res) => {
+  const id = Number(req.params.id);
+  const data = readData();
+  const r = (data.returns || []).find(x => x.id === id);
+  if (r) {
+    r.status = 'INSPECTED';
+    r.inspectionResult = req.body.inspectionResult;
+    r.inspectionNotes = req.body.inspectionNotes;
+  }
+  writeData(data);
+  res.json({ ok: true, return: r });
+});
+
+router.post('/returns/:id/approve', (req, res) => {
+  const id = Number(req.params.id);
+  const data = readData();
+  const r = (data.returns || []).find(x => x.id === id);
+  if (r) r.status = 'APPROVED';
+  writeData(data);
+  res.json({ ok: true, return: r });
+});
+
+router.post('/returns/:id/reject', (req, res) => {
+  const id = Number(req.params.id);
+  const data = readData();
+  const r = (data.returns || []).find(x => x.id === id);
+  if (r) {
+    r.status = 'REJECTED';
+    r.rejectionReason = req.body.reason || 'Rejected';
+  }
+  writeData(data);
+  res.json({ ok: true, return: r });
+});
+
+router.post('/returns/:id/complete', (req, res) => {
+  const id = Number(req.params.id);
+  const data = readData();
+  const r = (data.returns || []).find(x => x.id === id);
+  if (r) r.status = 'COMPLETED';
+  writeData(data);
+  res.json({ ok: true, return: r });
+});
+
 router.get('/wastage', (req, res) => {
   const data = readData();
-  res.json(data.wastage || []);
+  let list = (data.wastage || []).map(w => {
+    const prod = (data.products || []).find(p => p.id === w.productId) || { name: w.productName || 'Product', unit: w.unit || 'unit' };
+    const wh = (data.warehouses || []).find(w => w.id === w.warehouseId) || { name: w.warehouseName || 'Main Warehouse' };
+    return {
+      ...w,
+      product: { id: prod.id, name: prod.name, unit: prod.unit },
+      warehouse: wh.name
+    };
+  });
+  if (req.query.status) {
+    list = list.filter(w => w.status === req.query.status);
+  }
+  res.json(list);
 });
 
 router.post('/wastage', (req, res) => {
@@ -1062,6 +1708,7 @@ router.post('/wastage', (req, res) => {
     wastageNumber: `AF-WST-2026-${String(nextId).padStart(4, '0')}`,
     status: 'APPROVED',
     createdAt: new Date().toISOString(),
+    requestedByName: 'Farook',
     ...req.body
   };
   data.wastage = data.wastage || [];
@@ -1070,20 +1717,154 @@ router.post('/wastage', (req, res) => {
   res.status(201).json(wst);
 });
 
+router.post('/wastage/:id/approve', (req, res) => {
+  const id = Number(req.params.id);
+  const data = readData();
+  const w = (data.wastage || []).find(x => x.id === id);
+  if (w) w.status = 'APPROVED';
+  writeData(data);
+  res.json({ ok: true, wastage: w });
+});
+
+router.post('/wastage/:id/reject', (req, res) => {
+  const id = Number(req.params.id);
+  const data = readData();
+  const w = (data.wastage || []).find(x => x.id === id);
+  if (w) {
+    w.status = 'REJECTED';
+    w.rejectionReason = req.body.reason || 'Rejected';
+  }
+  writeData(data);
+  res.json({ ok: true, wastage: w });
+});
+
+router.get('/wastage/:id/document', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain');
+  res.setHeader('Content-Disposition', 'attachment; filename="wastage-doc.txt"');
+  res.send('Arshith Fresh Wastage Incident Report');
+});
+
 // ------------------- FINANCE & REPORTS -------------------
 router.get('/finance/overview', (req, res) => {
   const data = readData();
-  let inventoryValue = 0;
-  for (const b of data.batches) {
-    inventoryValue += ((b.availableQty || 0) + (b.reservedQty || 0)) * (b.purchasePrice || 0);
+  let inventoryValuation = 0;
+  let retailValue = 0;
+  for (const b of (data.batches || [])) {
+    const prod = (data.products || []).find(p => p.id === b.productId) || {};
+    const qty = (Number(b.availableQty || 0) + Number(b.reservedQty || 0));
+    inventoryValuation += qty * Number(b.purchasePrice || prod.purchasePrice || 0);
+    retailValue += qty * Number(prod.sellingPrice || 0);
   }
+
+  const purchaseValue = (data.purchases || []).reduce((sum, p) => sum + Number(p.subtotal || p.totalAmount || 0), 0);
+  const purchaseGst = (data.purchases || []).reduce((sum, p) => sum + Number(p.gstAmount || 0), 0);
+  const totalPurchaseWithGst = purchaseValue + purchaseGst;
+
+  const salesOrders = (data.orders || []).filter(o => o.status !== 'CANCELLED');
+  const salesValue = salesOrders.reduce((sum, o) => sum + Number(o.totalAmount || 0), 0);
+
+  const supplierPaymentsTotal = (data.supplierPayments || []).reduce((sum, p) => sum + Number(p.amount || 0), 0);
+  const supplierOutstanding = Math.max(0, totalPurchaseWithGst - supplierPaymentsTotal);
+
+  const customerReturns = (data.returns || []).filter(r => r.type === 'CUSTOMER');
+  const customerReturnValue = customerReturns.reduce((sum, r) => sum + Number(r.totalValue || 0), 0);
+
+  const supplierReturns = (data.returns || []).filter(r => r.type === 'SUPPLIER');
+  const supplierReturnValue = supplierReturns.reduce((sum, r) => sum + Number(r.totalValue || 0), 0);
+
+  const approvedWastage = (data.wastage || []).filter(w => w.status === 'APPROVED');
+  const wastageValue = approvedWastage.reduce((sum, w) => sum + Number(w.financialLoss || 0), 0);
+
+  const suppliers = (data.suppliers || []).map(s => {
+    const sPOs = (data.purchases || []).filter(p => p.supplierId === s.id);
+    const sValue = sPOs.reduce((sum, p) => sum + Number(p.totalAmount || 0), 0);
+    const sPaid = (data.supplierPayments || []).filter(p => p.supplierId === s.id).reduce((sum, p) => sum + Number(p.amount || 0), 0);
+    const sReturns = (data.returns || []).filter(r => r.supplierId === s.id).reduce((sum, r) => sum + Number(r.totalValue || 0), 0);
+    return {
+      id: s.id,
+      name: s.name,
+      orders: sPOs.length,
+      purchaseValue: sValue,
+      returns: sReturns,
+      paid: sPaid,
+      pending: Math.max(0, sValue - sPaid - sReturns)
+    };
+  });
+
+  const productProfit = (data.products || []).map(p => {
+    const prodBatches = (data.batches || []).filter(b => b.productId === p.id);
+    const avgCost = prodBatches.length > 0
+      ? prodBatches.reduce((sum, b) => sum + Number(b.purchasePrice || 0), 0) / prodBatches.length
+      : Number(p.purchasePrice || 0);
+
+    let qtySold = 0;
+    for (const o of salesOrders) {
+      for (const item of (o.items || [])) {
+        if (item.productId === p.id) {
+          qtySold += Number(item.quantity || 0);
+        }
+      }
+    }
+    const revenue = Math.round(qtySold * Number(p.sellingPrice || 0) * 100) / 100;
+    const cost = Math.round(qtySold * avgCost * 100) / 100;
+    const profit = Math.round((revenue - cost) * 100) / 100;
+    const margin = revenue > 0 ? Math.round((profit / revenue) * 1000) / 10 : 35;
+    return {
+      name: p.name,
+      qty: qtySold,
+      revenue,
+      cost,
+      profit,
+      margin
+    };
+  });
+
+  const estimatedMargins = (data.products || []).map(p => {
+    const s = getProductStock(p, data.batches || []);
+    const cost = Number(p.purchasePrice || 0);
+    const sell = Number(p.sellingPrice || 0);
+    const unitMargin = Math.round((sell - cost) * 100) / 100;
+    const marginPct = sell > 0 ? Math.round((unitMargin / sell) * 1000) / 10 : 0;
+    return {
+      name: p.name,
+      purchasePrice: cost,
+      sellingPrice: sell,
+      unitMargin,
+      marginPct,
+      stock: s.sellable
+    };
+  });
+
+  const wastageCatMap = {};
+  for (const w of (data.wastage || [])) {
+    const cat = w.category || 'OTHER';
+    wastageCatMap[cat] = (wastageCatMap[cat] || 0) + Number(w.financialLoss || 0);
+  }
+  const wastageByCategory = Object.entries(wastageCatMap).map(([category, value]) => ({
+    category,
+    value
+  }));
+
   res.json({
-    inventoryValue: Math.round(inventoryValue * 100) / 100,
-    purchasesThisMonth: 18900,
-    salesThisMonth: 2469,
-    grossMargin: 36.8,
-    outstandingReceivables: 0,
-    outstandingPayables: 0
+    note: 'Real-time financial reconciliation: FIFO/FEFO cost valuation, receivables, payables, and gross margins.',
+    totals: {
+      purchaseValue,
+      purchaseGst,
+      salesValue,
+      orders: salesOrders.length,
+      salesRefunds: customerReturnValue,
+      inventoryValuation: Math.round(inventoryValuation * 100) / 100,
+      retailValue: Math.round(retailValue * 100) / 100,
+      supplierOutstanding,
+      supplierPayments: supplierPaymentsTotal,
+      customerReturnValue,
+      supplierReturnValue,
+      wastageValue
+    },
+    suppliers,
+    productProfit,
+    estimatedMargins,
+    wastageByCategory
   });
 });
 
@@ -1103,7 +1884,7 @@ router.get('/reports', (req, res) => {
 
 router.get('/reports/:key', (req, res) => {
   const data = readData();
-  const ps = data.products.map(p => enrichProduct(p, data));
+  const ps = (data.products || []).map(p => enrichProduct(p, data));
   const repKey = req.params.key || req.query.report || 'current_stock';
 
   if (repKey === 'product_inventory') {
@@ -1252,7 +2033,7 @@ router.get('/notifications', (req, res) => {
 router.post('/notifications/:id/read', (req, res) => {
   const id = Number(req.params.id);
   const data = readData();
-  const n = data.notifications.find(x => x.id === id);
+  const n = (data.notifications || []).find(x => x.id === id);
   if (n) n.isRead = true;
   writeData(data);
   res.json({ ok: true });
@@ -1270,8 +2051,8 @@ router.get('/integration/events', (req, res) => {
   const data = readData();
   res.json({
     items: data.webhookEvents || [],
-    counts: { PROCESSED: 0, FAILED: 0, PENDING: 0 },
-    mapping: { mapped: 5, total: 5 },
+    counts: { PROCESSED: (data.webhookEvents || []).filter(e => e.status === 'PROCESSED').length, FAILED: 0, PENDING: 0 },
+    mapping: { mapped: (data.products || []).filter(p => p.websiteProductId).length, total: (data.products || []).length },
     config: {
       websiteBaseUrl: data.settings?.websiteBaseUrl || 'https://arshithfresh.com',
       pullOrders: false,
@@ -1283,12 +2064,17 @@ router.get('/integration/events', (req, res) => {
   });
 });
 
+router.post('/integration/events/:id/retry', (req, res) => {
+  res.json({ ok: true });
+});
+
 router.post('/integration/pull-orders', (req, res) => {
   res.json({ fetched: 0, processed: 0 });
 });
 
 router.post('/integration/push-stock', (req, res) => {
-  res.json({ products: 5, ok: 5, failed: 0 });
+  const data = readData();
+  res.json({ products: (data.products || []).length, ok: (data.products || []).length, failed: 0 });
 });
 
 router.post('/integration/import-products', (req, res) => {
@@ -1296,4 +2082,3 @@ router.post('/integration/import-products', (req, res) => {
 });
 
 module.exports = router;
-

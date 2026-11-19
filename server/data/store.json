@@ -92,233 +92,19 @@
       "createdAt": "2026-01-01T00:00:00.000Z"
     }
   ],
-  "employees": [
-    {
-      "id": "emp-001",
-      "empId": "EMP-0101",
-      "name": "Farook",
-      "email": "admin@arshithgroup.com",
-      "phone": "+91 98765 43210",
-      "department": "Executive Management",
-      "designation": "Managing Director & CEO",
-      "skills": [
-        "Strategic Planning",
-        "Enterprise Architecture",
-        "Portfolio Management",
-        "Executive Leadership"
-      ],
-      "experienceYears": 16,
-      "joinDate": "2020-01-01",
-      "hourlyRate": 3500,
-      "maxActiveProjects": 10,
-      "status": "ACTIVE",
-      "createdAt": "2026-01-01T00:00:00.000Z"
-    },
-    {
-      "id": "emp-002",
-      "empId": "EMP-0102",
-      "name": "Priya Sundaram",
-      "email": "pm@arshith.com",
-      "phone": "+91 98765 43211",
-      "department": "Project Delivery",
-      "designation": "Senior Project Manager",
-      "skills": [
-        "Agile / Scrum",
-        "Risk Management",
-        "Stakeholder Communication",
-        "Budget Tracking",
-        "Jira"
-      ],
-      "experienceYears": 10,
-      "joinDate": "2021-03-15",
-      "hourlyRate": 2200,
-      "maxActiveProjects": 4,
-      "status": "ACTIVE",
-      "createdAt": "2026-01-05T00:00:00.000Z"
-    },
-    {
-      "id": "emp-003",
-      "empId": "EMP-0103",
-      "name": "Vikramaditya Rao",
-      "email": "lead@arshith.com",
-      "phone": "+91 98765 43212",
-      "department": "Engineering",
-      "designation": "Technical Architect & Lead",
-      "skills": [
-        "System Design",
-        "React.js",
-        "Node.js",
-        "PostgreSQL",
-        "Microservices",
-        "Kubernetes"
-      ],
-      "experienceYears": 9,
-      "joinDate": "2021-06-01",
-      "hourlyRate": 2000,
-      "maxActiveProjects": 3,
-      "status": "ACTIVE",
-      "createdAt": "2026-01-10T00:00:00.000Z"
-    },
-    {
-      "id": "emp-004",
-      "empId": "EMP-0104",
-      "name": "Ananya Deshmukh",
-      "email": "dev@arshith.com",
-      "phone": "+91 98765 43213",
-      "department": "Engineering",
-      "designation": "Senior Full Stack Developer",
-      "skills": [
-        "React.js",
-        "Vite",
-        "Tailwind CSS",
-        "TypeScript",
-        "Express.js",
-        "Prisma ORM"
-      ],
-      "experienceYears": 6,
-      "joinDate": "2022-02-10",
-      "hourlyRate": 1600,
-      "maxActiveProjects": 2,
-      "status": "ACTIVE",
-      "createdAt": "2026-01-15T00:00:00.000Z"
-    },
-    {
-      "id": "emp-005",
-      "empId": "EMP-0105",
-      "name": "Rajesh Kulkarni",
-      "email": "finance@arshith.com",
-      "phone": "+91 98765 43214",
-      "department": "Finance & Accounts",
-      "designation": "Head of Financial Operations",
-      "skills": [
-        "Financial Modeling",
-        "Cost Auditing",
-        "Budget Analysis",
-        "Taxation & Invoicing"
-      ],
-      "experienceYears": 12,
-      "joinDate": "2021-01-15",
-      "hourlyRate": 1800,
-      "maxActiveProjects": 5,
-      "status": "ACTIVE",
-      "createdAt": "2026-01-12T00:00:00.000Z"
-    },
-    {
-      "id": "emp-006",
-      "empId": "EMP-0106",
-      "name": "Karthik Nair",
-      "email": "karthik.n@arshith.com",
-      "phone": "+91 98765 43215",
-      "department": "Engineering",
-      "designation": "Backend Developer",
-      "skills": [
-        "Node.js",
-        "PostgreSQL",
-        "Redis",
-        "GraphQL",
-        "Docker",
-        "RESTful APIs"
-      ],
-      "experienceYears": 5,
-      "joinDate": "2022-08-01",
-      "hourlyRate": 1400,
-      "maxActiveProjects": 3,
-      "status": "ACTIVE",
-      "createdAt": "2026-02-01T00:00:00.000Z"
-    },
-    {
-      "id": "emp-007",
-      "empId": "EMP-0107",
-      "name": "Sneha Patel",
-      "email": "sneha.p@arshith.com",
-      "phone": "+91 98765 43216",
-      "department": "Design",
-      "designation": "UI/UX Design Specialist",
-      "skills": [
-        "Figma",
-        "Design Systems",
-        "User Research",
-        "Wireframing",
-        "Prototyping"
-      ],
-      "experienceYears": 5,
-      "joinDate": "2022-10-15",
-      "hourlyRate": 1500,
-      "maxActiveProjects": 3,
-      "status": "ACTIVE",
-      "createdAt": "2026-02-10T00:00:00.000Z"
-    },
-    {
-      "id": "emp-008",
-      "empId": "EMP-0108",
-      "name": "Rohan Verma",
-      "email": "rohan.v@arshith.com",
-      "phone": "+91 98765 43217",
-      "department": "QA & Testing",
-      "designation": "Lead QA Automation Engineer",
-      "skills": [
-        "Cypress",
-        "Playwright",
-        "Jest",
-        "API Testing",
-        "Performance Profiling",
-        "Selenium"
-      ],
-      "experienceYears": 6,
-      "joinDate": "2023-01-10",
-      "hourlyRate": 1300,
-      "maxActiveProjects": 4,
-      "status": "ACTIVE",
-      "createdAt": "2026-02-15T00:00:00.000Z"
-    },
-    {
-      "id": "emp-009",
-      "empId": "EMP-0109",
-      "name": "Meera Iyer",
-      "email": "meera.i@arshith.com",
-      "phone": "+91 98765 43218",
-      "department": "DevOps & Cloud",
-      "designation": "DevOps & Security Specialist",
-      "skills": [
-        "AWS",
-        "Terraform",
-        "CI/CD Pipelines",
-        "Docker",
-        "Kubernetes",
-        "Security Hardening"
-      ],
-      "experienceYears": 7,
-      "joinDate": "2023-03-01",
-      "hourlyRate": 1900,
-      "maxActiveProjects": 4,
-      "status": "ACTIVE",
-      "createdAt": "2026-02-20T00:00:00.000Z"
-    },
-    {
-      "id": "emp-010",
-      "empId": "EMP-0110",
-      "name": "Amitabh Sen",
-      "email": "amitabh.s@arshith.com",
-      "phone": "+91 98765 43219",
-      "department": "Data & AI",
-      "designation": "Machine Learning Engineer",
-      "skills": [
-        "Python",
-        "PyTorch",
-        "FastAPI",
-        "LangChain",
-        "Vector DBs",
-        "Model Fine-tuning"
-      ],
-      "experienceYears": 4,
-      "joinDate": "2023-07-01",
-      "hourlyRate": 1700,
-      "maxActiveProjects": 2,
-      "status": "ACTIVE",
-      "createdAt": "2026-03-01T00:00:00.000Z"
-    }
-  ],
+  "employees": [],
   "clients": [
+    {
+      "id": "cli-1795062295892",
+      "clientId": "CLI-5892",
+      "companyName": "XYZ",
+      "contactPerson": "MNO",
+      "email": "mno@gmail.com",
+      "phone": "8990976546",
+      "notes": "Auto-created via Project Registration form",
+      "createdAt": "2026-11-19T04:24:55.892Z",
+      "updatedAt": "2026-11-19T04:24:55.892Z"
+    },
     {
       "id": "cli-1794554809078",
       "clientId": "CLI-9078",
@@ -374,9 +160,70 @@
       "description": "IoT sensor telematics and municipal citizen portals"
     }
   ],
-  "projects": [],
+  "projects": [
+    {
+      "id": "pro-1795062295894",
+      "projectId": "AIP-2026-001",
+      "title": "Logistics and Fleet Management System",
+      "description": "The Logistics and Fleet Management System is an integrated web-based application designed to automate and streamline transportation.",
+      "clientId": "cli-1795062295892",
+      "categoryName": "Supply Chain & Logistics",
+      "projectManagerId": "emp-001",
+      "projectType": "FIXED_PRICE",
+      "projectSource": "DIRECT_CLIENT",
+      "priority": "HIGH",
+      "status": "NEW",
+      "completionPercentage": 0,
+      "currentPhase": "Initiation",
+      "internalRemarks": "",
+      "receivedDate": "2026-11-10",
+      "acceptedDate": "2026-11-12",
+      "plannedStartDate": "2026-11-19",
+      "actualStartDate": null,
+      "expectedCompletionDate": "2026-12-25",
+      "revisedCompletionDate": null,
+      "actualCompletionDate": null,
+      "deliveryDate": null,
+      "proposedBudget": 100000,
+      "approvedBudget": 120000,
+      "advanceReceived": 50000,
+      "totalReceived": 50000,
+      "clientPendingPayment": 70000,
+      "estimatedDevCost": 120000,
+      "actualDevCost": 0,
+      "employeeCost": 0,
+      "softwareInfraCost": 0,
+      "otherExpenses": 0,
+      "remainingBudget": 120000,
+      "profitOrLoss": 50000,
+      "objective": "Transportation,shipping,delivery",
+      "scope": "",
+      "functionalRequirements": "",
+      "technicalRequirements": "",
+      "deliverables": "",
+      "expectedOutcome": "",
+      "requiredTechnologies": [],
+      "dependencies": "",
+      "specialInstructions": "",
+      "isArchived": false,
+      "createdAt": "2026-11-19T04:24:55.894Z",
+      "updatedAt": "2026-11-19T04:24:55.894Z"
+    }
+  ],
   "assignments": [],
-  "statusHistory": [],
+  "statusHistory": [
+    {
+      "id": "sta-1795062295896",
+      "projectId": "pro-1795062295894",
+      "previousStatus": "NONE",
+      "newStatus": "NEW",
+      "changedById": "usr-001",
+      "changeReason": "Initial project registration",
+      "remarks": "Created via Arshith Infotech Project Inventory Form",
+      "createdAt": "2026-11-19T04:24:55.896Z",
+      "updatedAt": "2026-11-19T04:24:55.896Z"
+    }
+  ],
   "tasks": [],
   "milestones": [],
   "expenses": [],
@@ -385,6 +232,17 @@
   "risks": [],
   "documents": [],
   "notifications": [
+    {
+      "id": "not-1795062295901",
+      "userId": "usr-001",
+      "title": "New Project Registered",
+      "message": "Project AIP-2026-001 (Logistics and Fleet Management System) has been registered with status NEW.",
+      "type": "INFO",
+      "relatedProjectId": "pro-1795062295894",
+      "isRead": false,
+      "createdAt": "2026-11-19T04:24:55.901Z",
+      "updatedAt": "2026-11-19T04:24:55.901Z"
+    },
     {
       "id": "not-1794554809084",
       "userId": "usr-001",
@@ -409,6 +267,184 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": "aud-1795062657440",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-010",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0110",
+        "name": "Amitabh Sen",
+        "deletedAt": "2026-11-19T04:30:57.440Z"
+      },
+      "createdAt": "2026-11-19T04:30:57.440Z",
+      "updatedAt": "2026-11-19T04:30:57.440Z"
+    },
+    {
+      "id": "aud-1795062655378",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-009",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0109",
+        "name": "Meera Iyer",
+        "deletedAt": "2026-11-19T04:30:55.378Z"
+      },
+      "createdAt": "2026-11-19T04:30:55.378Z",
+      "updatedAt": "2026-11-19T04:30:55.378Z"
+    },
+    {
+      "id": "aud-1795062653653",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-008",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0108",
+        "name": "Rohan Verma",
+        "deletedAt": "2026-11-19T04:30:53.653Z"
+      },
+      "createdAt": "2026-11-19T04:30:53.653Z",
+      "updatedAt": "2026-11-19T04:30:53.653Z"
+    },
+    {
+      "id": "aud-1795062651704",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-007",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0107",
+        "name": "Sneha Patel",
+        "deletedAt": "2026-11-19T04:30:51.704Z"
+      },
+      "createdAt": "2026-11-19T04:30:51.704Z",
+      "updatedAt": "2026-11-19T04:30:51.704Z"
+    },
+    {
+      "id": "aud-1795062649754",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-006",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0106",
+        "name": "Karthik Nair",
+        "deletedAt": "2026-11-19T04:30:49.754Z"
+      },
+      "createdAt": "2026-11-19T04:30:49.754Z",
+      "updatedAt": "2026-11-19T04:30:49.754Z"
+    },
+    {
+      "id": "aud-1795062647333",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-005",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0105",
+        "name": "Rajesh Kulkarni",
+        "deletedAt": "2026-11-19T04:30:47.333Z"
+      },
+      "createdAt": "2026-11-19T04:30:47.333Z",
+      "updatedAt": "2026-11-19T04:30:47.333Z"
+    },
+    {
+      "id": "aud-1795062645049",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-004",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0104",
+        "name": "Ananya Deshmukh",
+        "deletedAt": "2026-11-19T04:30:45.049Z"
+      },
+      "createdAt": "2026-11-19T04:30:45.049Z",
+      "updatedAt": "2026-11-19T04:30:45.049Z"
+    },
+    {
+      "id": "aud-1795062642903",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-003",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0103",
+        "name": "Vikramaditya Rao",
+        "deletedAt": "2026-11-19T04:30:42.902Z"
+      },
+      "createdAt": "2026-11-19T04:30:42.903Z",
+      "updatedAt": "2026-11-19T04:30:42.903Z"
+    },
+    {
+      "id": "aud-1795062640395",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-002",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0102",
+        "name": "Priya Sundaram",
+        "deletedAt": "2026-11-19T04:30:40.395Z"
+      },
+      "createdAt": "2026-11-19T04:30:40.395Z",
+      "updatedAt": "2026-11-19T04:30:40.395Z"
+    },
+    {
+      "id": "aud-1795062638454",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-001",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0101",
+        "name": "Farook",
+        "deletedAt": "2026-11-19T04:30:38.454Z"
+      },
+      "createdAt": "2026-11-19T04:30:38.455Z",
+      "updatedAt": "2026-11-19T04:30:38.455Z"
+    },
+    {
+      "id": "aud-1795062295898",
+      "entityType": "PROJECT",
+      "entityId": "pro-1795062295894",
+      "action": "CREATE",
+      "performedById": "usr-001",
+      "changes": {
+        "projectId": "AIP-2026-001",
+        "title": "Logistics and Fleet Management System",
+        "budget": 120000
+      },
+      "createdAt": "2026-11-19T04:24:55.898Z",
+      "updatedAt": "2026-11-19T04:24:55.898Z"
+    },
+    {
+      "id": "aud-1795060976659",
+      "entityType": "USER",
+      "entityId": "usr-007",
+      "action": "LOGIN",
+      "performedById": "usr-007",
+      "changes": {
+        "loginTime": "2026-11-19T04:02:56.659Z"
+      },
+      "createdAt": "2026-11-19T04:02:56.659Z",
+      "updatedAt": "2026-11-19T04:02:56.659Z"
+    },
+    {
+      "id": "aud-1795060560404",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-19T03:56:00.404Z"
+      },
+      "createdAt": "2026-11-19T03:56:00.404Z",
+      "updatedAt": "2026-11-19T03:56:00.404Z"
+    },
     {
       "id": "aud-1795008931046",
       "entityType": "USER",
