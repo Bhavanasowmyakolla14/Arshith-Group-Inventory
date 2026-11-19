@@ -468,14 +468,16 @@ router.get('/categories', (req, res) => {
     .map(c => {
       const sub = (data.categories || []).filter(s => s.parentId === c.id && s.isActive);
       const prodCount = (data.products || []).filter(p => p.categoryId === c.id).length;
+      const subFormatted = sub.map(s => ({
+        ...s,
+        productCount: (data.products || []).filter(p => p.subcategoryId === s.id).length
+      }));
       return {
         ...c,
         productCount: prodCount,
         _count: { products: prodCount, subcategories: sub.length },
-        subcategories: sub.map(s => ({
-          ...s,
-          productCount: (data.products || []).filter(p => p.subcategoryId === s.id).length
-        }))
+        children: subFormatted,
+        subcategories: subFormatted
       };
     });
   res.json(top);

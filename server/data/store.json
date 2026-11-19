@@ -92,7 +92,156 @@
       "createdAt": "2026-01-01T00:00:00.000Z"
     }
   ],
-  "employees": [],
+  "employees": [
+    {
+      "id": "emp-1795063191500",
+      "empId": "EMP-0107",
+      "name": "Shaik Ameen",
+      "email": "ameen@arshithgroup.com",
+      "phone": "6302412357",
+      "department": "Engineering",
+      "designation": "Web Developer",
+      "skills": [
+        "React.js",
+        "Node.js",
+        "PostgreSQL"
+      ],
+      "experienceYears": 1,
+      "joinDate": "2026-11-19",
+      "hourlyRate": 1000,
+      "maxActiveProjects": 1,
+      "status": "ACTIVE",
+      "createdAt": "2026-11-19T04:39:51.500Z",
+      "updatedAt": "2026-11-19T04:39:51.500Z"
+    },
+    {
+      "id": "emp-1795062976620",
+      "empId": "EMP-0106",
+      "name": "Sai Prakash",
+      "email": "saiprakash@arshithgroup.com",
+      "phone": "9705206376",
+      "department": "Engineering",
+      "designation": " Full Stack Developer",
+      "skills": [
+        "React.js",
+        "Node.js",
+        "PostgreSQL"
+      ],
+      "experienceYears": 1,
+      "joinDate": "2026-11-19",
+      "hourlyRate": 1000,
+      "maxActiveProjects": 1,
+      "status": "ACTIVE",
+      "createdAt": "2026-11-19T04:36:16.620Z",
+      "updatedAt": "2026-11-19T04:36:16.620Z"
+    },
+    {
+      "id": "emp-1795062931352",
+      "empId": "EMP-0105",
+      "name": "Kranti",
+      "email": "kranti@arshithgroup.com",
+      "phone": "72044 08071",
+      "department": "Engineering",
+      "designation": "Web Developer",
+      "skills": [
+        "React.js",
+        "Node.js",
+        "PostgreSQL"
+      ],
+      "experienceYears": 1,
+      "joinDate": "2026-11-19",
+      "hourlyRate": 1000,
+      "maxActiveProjects": 1,
+      "status": "ACTIVE",
+      "createdAt": "2026-11-19T04:35:31.352Z",
+      "updatedAt": "2026-11-19T04:35:31.352Z"
+    },
+    {
+      "id": "emp-1795062890133",
+      "empId": "EMP-0104",
+      "name": "Chanukya B",
+      "email": "chanukyab@arshithgroup.com",
+      "phone": "7671897947",
+      "department": "Engineering",
+      "designation": "Web Developer",
+      "skills": [
+        "React.js",
+        "PostgreSQL",
+        "Python"
+      ],
+      "experienceYears": 1,
+      "joinDate": "2026-11-19",
+      "hourlyRate": 1000,
+      "maxActiveProjects": 1,
+      "status": "ACTIVE",
+      "createdAt": "2026-11-19T04:34:50.133Z",
+      "updatedAt": "2026-11-19T04:34:50.133Z"
+    },
+    {
+      "id": "emp-1795062837709",
+      "empId": "EMP-0103",
+      "name": "Vulla Reddy M",
+      "email": "vullasreddym@arshithgroup.com",
+      "phone": "9107711118",
+      "department": "Engineering",
+      "designation": "Python Developer",
+      "skills": [
+        "React.js",
+        "Node.js",
+        "PostgreSQL",
+        "Python"
+      ],
+      "experienceYears": 1,
+      "joinDate": "2026-11-19",
+      "hourlyRate": 1000,
+      "maxActiveProjects": 1,
+      "status": "ACTIVE",
+      "createdAt": "2026-11-19T04:33:57.709Z",
+      "updatedAt": "2026-11-19T04:33:57.709Z"
+    },
+    {
+      "id": "emp-1795062775409",
+      "empId": "EMP-0102",
+      "name": "Panga yashwant",
+      "email": "yashwantp@arshithgroup.com",
+      "phone": "6281037993",
+      "department": "Engineering",
+      "designation": "Web Developer",
+      "skills": [
+        "React.js",
+        "Node.js",
+        "Mongo DB"
+      ],
+      "experienceYears": 1,
+      "joinDate": "2026-11-19",
+      "hourlyRate": 1000,
+      "maxActiveProjects": 1,
+      "status": "ACTIVE",
+      "createdAt": "2026-11-19T04:32:55.409Z",
+      "updatedAt": "2026-11-19T04:32:55.409Z"
+    },
+    {
+      "id": "emp-1795062713818",
+      "empId": "EMP-0101",
+      "name": "Kolla Bhavana Sowmya",
+      "email": "bhavanasowmyak@arshithgroup.com",
+      "phone": "9347567375",
+      "department": "Engineering",
+      "designation": "Web Developer",
+      "skills": [
+        "React.js",
+        "Node.js",
+        "PostgreSQL"
+      ],
+      "experienceYears": 0,
+      "joinDate": "2026-11-19",
+      "hourlyRate": 1000,
+      "maxActiveProjects": 1,
+      "status": "ACTIVE",
+      "createdAt": "2026-11-19T04:31:53.818Z",
+      "updatedAt": "2026-11-19T04:31:53.818Z"
+    }
+  ],
   "clients": [
     {
       "id": "cli-1795062295892",
@@ -172,7 +321,7 @@
       "projectType": "FIXED_PRICE",
       "projectSource": "DIRECT_CLIENT",
       "priority": "HIGH",
-      "status": "NEW",
+      "status": "ASSIGNED",
       "completionPercentage": 0,
       "currentPhase": "Initiation",
       "internalRemarks": "",
@@ -207,11 +356,79 @@
       "specialInstructions": "",
       "isArchived": false,
       "createdAt": "2026-11-19T04:24:55.894Z",
-      "updatedAt": "2026-11-19T04:24:55.894Z"
+      "updatedAt": "2026-11-19T04:36:41.235Z"
     }
   ],
-  "assignments": [],
+  "assignments": [
+    {
+      "id": "ass-1795063202392",
+      "projectId": "pro-1795062295894",
+      "employeeId": "emp-1795063191500",
+      "projectRole": "Full Stack Developer",
+      "responsibilities": "",
+      "allocationPercentage": 100,
+      "assignedDate": "2026-11-19",
+      "expectedReleaseDate": "2026-11-19",
+      "actualReleaseDate": null,
+      "assignmentStatus": "ACTIVE",
+      "createdAt": "2026-11-19T04:40:02.392Z",
+      "updatedAt": "2026-11-19T04:40:02.392Z"
+    },
+    {
+      "id": "ass-1795063017412",
+      "projectId": "pro-1795062295894",
+      "employeeId": "emp-1795062976620",
+      "projectRole": "Full Stack Developer",
+      "responsibilities": "",
+      "allocationPercentage": 100,
+      "assignedDate": "2026-11-19",
+      "expectedReleaseDate": "2026-12-25",
+      "actualReleaseDate": null,
+      "assignmentStatus": "ACTIVE",
+      "createdAt": "2026-11-19T04:36:57.412Z",
+      "updatedAt": "2026-11-19T04:37:15.355Z"
+    },
+    {
+      "id": "ass-1795063009110",
+      "projectId": "pro-1795062295894",
+      "employeeId": "emp-1795062890133",
+      "projectRole": "Full Stack Developer",
+      "responsibilities": "",
+      "allocationPercentage": 100,
+      "assignedDate": "2026-11-19",
+      "expectedReleaseDate": "2026-11-19",
+      "actualReleaseDate": null,
+      "assignmentStatus": "ACTIVE",
+      "createdAt": "2026-11-19T04:36:49.110Z",
+      "updatedAt": "2026-11-19T04:37:19.912Z"
+    },
+    {
+      "id": "ass-1795063001232",
+      "projectId": "pro-1795062295894",
+      "employeeId": "emp-1795062837709",
+      "projectRole": "Full Stack Developer",
+      "responsibilities": "",
+      "allocationPercentage": 100,
+      "assignedDate": "2026-11-19",
+      "expectedReleaseDate": "2026-11-19",
+      "actualReleaseDate": null,
+      "assignmentStatus": "ACTIVE",
+      "createdAt": "2026-11-19T04:36:41.232Z",
+      "updatedAt": "2026-11-19T04:37:24.114Z"
+    }
+  ],
   "statusHistory": [
+    {
+      "id": "sta-1795063001238",
+      "projectId": "pro-1795062295894",
+      "previousStatus": "NEW",
+      "newStatus": "ASSIGNED",
+      "changedById": "usr-001",
+      "changeReason": "First key project team member allocated",
+      "remarks": "Assigned Vulla Reddy M as Full Stack Developer",
+      "createdAt": "2026-11-19T04:36:41.238Z",
+      "updatedAt": "2026-11-19T04:36:41.238Z"
+    },
     {
       "id": "sta-1795062295896",
       "projectId": "pro-1795062295894",
@@ -267,6 +484,223 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": "aud-1795063202394",
+      "entityType": "ASSIGNMENT",
+      "entityId": "ass-1795063202392",
+      "action": "ASSIGN",
+      "performedById": "usr-001",
+      "changes": {
+        "projectId": "pro-1795062295894",
+        "employeeId": "emp-1795063191500",
+        "projectRole": "Full Stack Developer",
+        "allocationPercentage": 100,
+        "warning": null
+      },
+      "createdAt": "2026-11-19T04:40:02.394Z",
+      "updatedAt": "2026-11-19T04:40:02.394Z"
+    },
+    {
+      "id": "aud-1795063191502",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-1795063191500",
+      "action": "CREATE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0107",
+        "name": "Shaik Ameen",
+        "department": "Engineering",
+        "designation": "Web Developer"
+      },
+      "createdAt": "2026-11-19T04:39:51.502Z",
+      "updatedAt": "2026-11-19T04:39:51.502Z"
+    },
+    {
+      "id": "aud-1795063044116",
+      "entityType": "ASSIGNMENT",
+      "entityId": "ass-1795063001232",
+      "action": "UPDATE",
+      "performedById": "usr-001",
+      "changes": {
+        "projectRole": "Full Stack Developer",
+        "allocationPercentage": 100,
+        "responsibilities": "",
+        "expectedReleaseDate": "2026-11-19",
+        "assignmentStatus": "ACTIVE"
+      },
+      "createdAt": "2026-11-19T04:37:24.116Z",
+      "updatedAt": "2026-11-19T04:37:24.116Z"
+    },
+    {
+      "id": "aud-1795063039914",
+      "entityType": "ASSIGNMENT",
+      "entityId": "ass-1795063009110",
+      "action": "UPDATE",
+      "performedById": "usr-001",
+      "changes": {
+        "projectRole": "Full Stack Developer",
+        "allocationPercentage": 100,
+        "responsibilities": "",
+        "expectedReleaseDate": "2026-11-19",
+        "assignmentStatus": "ACTIVE"
+      },
+      "createdAt": "2026-11-19T04:37:19.914Z",
+      "updatedAt": "2026-11-19T04:37:19.914Z"
+    },
+    {
+      "id": "aud-1795063035358",
+      "entityType": "ASSIGNMENT",
+      "entityId": "ass-1795063017412",
+      "action": "UPDATE",
+      "performedById": "usr-001",
+      "changes": {
+        "projectRole": "Full Stack Developer",
+        "allocationPercentage": 100,
+        "responsibilities": "",
+        "expectedReleaseDate": "2026-12-25",
+        "assignmentStatus": "ACTIVE"
+      },
+      "createdAt": "2026-11-19T04:37:15.358Z",
+      "updatedAt": "2026-11-19T04:37:15.358Z"
+    },
+    {
+      "id": "aud-1795063017413",
+      "entityType": "ASSIGNMENT",
+      "entityId": "ass-1795063017412",
+      "action": "ASSIGN",
+      "performedById": "usr-001",
+      "changes": {
+        "projectId": "pro-1795062295894",
+        "employeeId": "emp-1795062976620",
+        "projectRole": "Full Stack Developer",
+        "allocationPercentage": 50,
+        "warning": null
+      },
+      "createdAt": "2026-11-19T04:36:57.413Z",
+      "updatedAt": "2026-11-19T04:36:57.413Z"
+    },
+    {
+      "id": "aud-1795063009113",
+      "entityType": "ASSIGNMENT",
+      "entityId": "ass-1795063009110",
+      "action": "ASSIGN",
+      "performedById": "usr-001",
+      "changes": {
+        "projectId": "pro-1795062295894",
+        "employeeId": "emp-1795062890133",
+        "projectRole": "Full Stack Developer",
+        "allocationPercentage": 50,
+        "warning": null
+      },
+      "createdAt": "2026-11-19T04:36:49.113Z",
+      "updatedAt": "2026-11-19T04:36:49.113Z"
+    },
+    {
+      "id": "aud-1795063001240",
+      "entityType": "ASSIGNMENT",
+      "entityId": "ass-1795063001232",
+      "action": "ASSIGN",
+      "performedById": "usr-001",
+      "changes": {
+        "projectId": "pro-1795062295894",
+        "employeeId": "emp-1795062837709",
+        "projectRole": "Full Stack Developer",
+        "allocationPercentage": 50,
+        "warning": null
+      },
+      "createdAt": "2026-11-19T04:36:41.240Z",
+      "updatedAt": "2026-11-19T04:36:41.240Z"
+    },
+    {
+      "id": "aud-1795062976621",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-1795062976620",
+      "action": "CREATE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0106",
+        "name": "Sai Prakash",
+        "department": "Engineering",
+        "designation": " Full Stack Developer"
+      },
+      "createdAt": "2026-11-19T04:36:16.621Z",
+      "updatedAt": "2026-11-19T04:36:16.621Z"
+    },
+    {
+      "id": "aud-1795062931354",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-1795062931352",
+      "action": "CREATE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0105",
+        "name": "Kranti",
+        "department": "Engineering",
+        "designation": "Web Developer"
+      },
+      "createdAt": "2026-11-19T04:35:31.354Z",
+      "updatedAt": "2026-11-19T04:35:31.354Z"
+    },
+    {
+      "id": "aud-1795062890135",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-1795062890133",
+      "action": "CREATE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0104",
+        "name": "Chanukya B",
+        "department": "Engineering",
+        "designation": "Web Developer"
+      },
+      "createdAt": "2026-11-19T04:34:50.135Z",
+      "updatedAt": "2026-11-19T04:34:50.135Z"
+    },
+    {
+      "id": "aud-1795062837710",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-1795062837709",
+      "action": "CREATE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0103",
+        "name": "Vulla Reddy M",
+        "department": "Engineering",
+        "designation": "Python Developer"
+      },
+      "createdAt": "2026-11-19T04:33:57.710Z",
+      "updatedAt": "2026-11-19T04:33:57.710Z"
+    },
+    {
+      "id": "aud-1795062775411",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-1795062775409",
+      "action": "CREATE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0102",
+        "name": "Panga yashwant",
+        "department": "Engineering",
+        "designation": "Web Developer"
+      },
+      "createdAt": "2026-11-19T04:32:55.411Z",
+      "updatedAt": "2026-11-19T04:32:55.411Z"
+    },
+    {
+      "id": "aud-1795062713820",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-1795062713818",
+      "action": "CREATE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0101",
+        "name": "Kolla Bhavana Sowmya",
+        "department": "Engineering",
+        "designation": "Web Developer"
+      },
+      "createdAt": "2026-11-19T04:31:53.820Z",
+      "updatedAt": "2026-11-19T04:31:53.820Z"
+    },
     {
       "id": "aud-1795062657440",
       "entityType": "EMPLOYEE",
