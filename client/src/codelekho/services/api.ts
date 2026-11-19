@@ -1,7 +1,7 @@
 import { Student, Course, LearningModule, CertificateRecord, FinancialTransaction, ExamAttempt, GrowthMetrics } from '../types';
 
 // Live CodeLekho Production API Base URL (configurable via .env VITE_API_BASE_URL)
-export const PRODUCTION_API_URL = import.meta.env?.VITE_API_BASE_URL || 'https://codelekho.com/api';
+export const PRODUCTION_API_URL = import.meta.env?.VITE_API_BASE_URL || '/api/codelekho';
 export const LOCAL_FALLBACK_URL = import.meta.env?.VITE_LOCAL_API_URL || 'http://localhost:5000/api';
 
 export interface ProductionHealthStatus {
@@ -34,6 +34,18 @@ export interface ProductionStudentItem {
 }
 
 export const apiService = {
+  // Fetch live courses from Supabase
+  async getCourses(): Promise<{ success: boolean; courses: Course[] }> {
+    try {
+      const res = await fetch(`${PRODUCTION_API_URL}/courses`, { signal: AbortSignal.timeout(6000) });
+      if (!res.ok) return { success: false, courses: [] };
+      const data = await res.json();
+      return { success: true, courses: data.courses || [] };
+    } catch {
+      return { success: false, courses: [] };
+    }
+  },
+
   // 1. Production Backend Health Check
   async checkProductionHealth(): Promise<ProductionHealthStatus | null> {
     try {
@@ -146,7 +158,7 @@ export const apiService = {
 
           return {
             id: item.id || `live-st-${idx}`,
-            studentId: item.regNo || item.id || `CL-${String(idx + 1).padStart(4, '0')}`,
+            studentId: item.studentId || item.regNo || item.id || `ARB-STU-${String(idx + 1).padStart(4, '0')}`,
             name: item.name || 'Student Learner',
             email: item.email,
             avatar: `https://images.unsplash.com/photo-${1534528741775 + (idx % 10)}?w=150&auto=format&fit=crop&q=80`,
@@ -154,16 +166,16 @@ export const apiService = {
             enrolledCourses: item.enrolledCourses || [course],
             track: track as any,
             courseProgress: progress,
-            examStatus: item.examScore ? (item.examScore >= 70 ? 'Passed' : 'Needs Retake') : (progress >= 80 ? 'Scheduled' : 'Pending'),
-            examScore: item.examScore,
-            examAttempts: item.examScore ? 1 : 0,
-            certificateStatus: (item.certificateStatus === 'Earned' || item.certificateId) ? 'Issued' : (progress >= 100 ? 'In Review' : 'Not Eligible'),
+            examStatus: (item.examStatus as any) || (typeof item.examScore === 'number' && item.examScore > 0 ? (item.examScore >= 70 ? 'Passed' : 'Needs Retake') : (progress >= 80 ? 'Scheduled' : 'Pending')),
+            examScore: typeof item.examScore === 'number' ? item.examScore : undefined,
+            examAttempts: typeof item.examScore === 'number' && item.examScore > 0 ? 1 : 0,
+            certificateStatus: (item.certificateStatus === 'Earned' || item.certificateStatus === 'Issued' || item.certificateId) ? 'Issued' : (progress >= 100 ? 'In Review' : 'In Training'),
             certificateId: item.certificateId,
             registrationDate: regDate,
-            status: item.status === 'Suspended' ? 'Inactive' : (progress > 50 ? 'On-Track' : 'Active'),
+            status: item.status === 'Suspended' ? 'Inactive' : (item.status === 'On-Track' ? 'On-Track' : 'Active'),
             lastActive: 'Live Synced',
             lastActiveTimestamp: Date.now(),
-            modulesCompleted: item.completedModulesCount || Math.round((progress / 100) * 15),
+            modulesCompleted: item.completedModulesCount !== undefined ? item.completedModulesCount : Math.round((progress / 100) * 15),
             totalModules: item.totalModules || 15,
             quizScoreAvg: 85,
             codingProblemsSolved: Math.round(progress * 1.5)

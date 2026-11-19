@@ -278,6 +278,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setProductionSource(result.source);
       setIsBackendConnected(true);
       showToast('Live Synchronized', `Synchronized ${result.students.length} real student accounts from CodeLekho production.`);
+
+      // 3. Fetch courses and modules from Supabase
+      try {
+        const cResult = await apiService.getCourses();
+        if (cResult.success && cResult.courses.length > 0) {
+          setCourses(cResult.courses);
+          const mods = cResult.courses.flatMap((c: any) => c.modules || []);
+          if (mods.length > 0) {
+            setModules(mods);
+          }
+        }
+      } catch {}
     } else {
       setIsBackendConnected(health?.status === 'ok');
       if (result.error?.includes('Staff Token')) {

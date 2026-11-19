@@ -18,6 +18,7 @@
     "start": "concurrently \"npm run server\" \"npm run client\""
   },
   "devDependencies": {
+    "@rollup/wasm-node": "^4.68.7",
     "concurrently": "^9.1.0"
   }
 }

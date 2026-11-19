@@ -98,7 +98,7 @@ export const CourseDetailView: React.FC = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2">
               <span className="font-mono text-xs bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">
-                {selectedCourse.code}
+                {selectedCourse.code || selectedCourse.id}
               </span>
               <span className="text-xs bg-amber-500/20 text-amber-300 font-medium px-2 py-0.5 rounded-full border border-amber-500/30 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
@@ -194,7 +194,7 @@ export const CourseDetailView: React.FC = () => {
           <div className="flex flex-wrap items-center gap-6 pt-2 text-xs text-slate-400 border-t border-slate-800/80">
             <div>
               <span className="text-[10px] uppercase text-slate-500 block">Project Manager / Instructor</span>
-              <span className="font-semibold text-slate-200">{selectedCourse.instructor} (Senior Lead)</span>
+              <span className="font-semibold text-slate-200">{typeof selectedCourse.instructor === 'object' && selectedCourse.instructor !== null ? (selectedCourse.instructor as any).name : (selectedCourse.instructor || 'Lead Educator')} (Senior Lead)</span>
             </div>
             <div>
               <span className="text-[10px] uppercase text-slate-500 block">Start</span>

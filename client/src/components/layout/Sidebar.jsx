@@ -19,12 +19,15 @@ import {
   Layers,
   ChevronRight,
   Sparkles,
+  Building2,
+  Network,
 } from 'lucide-react';
 
 export const navSections = [
   {
     title: 'Core Portfolio',
     items: [
+      { id: 'central-dashboard', label: 'Central Business Hub', icon: Building2, badge: 'Unified', badgeColor: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' },
       { id: 'dashboard', label: 'Executive Dashboard', icon: LayoutDashboard },
       { id: 'projects', label: 'Projects Inventory', icon: FolderGit2, badge: 'Main', badgeColor: 'bg-blue-500/20 text-blue-300 border border-blue-500/30' },
       { id: 'pipeline', label: 'Portfolio Pipeline', icon: Workflow },
@@ -52,6 +55,7 @@ export const navSections = [
   {
     title: 'Administration',
     items: [
+      { id: 'integrations', label: 'Integrations & Sync', icon: Network, badge: '3 Hubs', badgeColor: 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' },
       { id: 'notifications', label: 'Alerts & Notifications', icon: Bell },
       { id: 'users', label: 'Access Control', icon: ShieldCheck },
       { id: 'audit-logs', label: 'Audit Trail', icon: History },

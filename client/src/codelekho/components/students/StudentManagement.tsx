@@ -283,7 +283,9 @@ export const StudentManagement: React.FC = () => {
 
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-2.5">
-                        <img src={student.avatar} alt={student.name} className="w-8 h-8 rounded-full object-cover shrink-0 border border-slate-200" />
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-[11px] bg-gradient-to-br from-blue-500 to-indigo-600 text-white shrink-0 shadow-xs uppercase">
+                          {student.name.trim().slice(0, 2)}
+                        </div>
                         <div>
                           <div className="font-bold text-slate-900">{student.name}</div>
                           <div className="text-[11px] text-slate-500 font-mono">{student.email}</div>
@@ -328,12 +330,12 @@ export const StudentManagement: React.FC = () => {
                               : 'bg-slate-100 text-slate-600'
                       }`}>
                         {student.examStatus}
-                        {student.examScore !== undefined && ` (${student.examScore}%)`}
+                        {student.examStatus === 'Passed' && typeof student.examScore === 'number' && ` (${student.examScore}%)`}
                       </span>
                     </td>
 
                     <td className="py-3.5 px-4">
-                      {student.certificateStatus === 'Issued' ? (
+                      {student.certificateStatus === 'Issued' || student.certificateStatus === 'Earned' ? (
                         <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
                           <Award className="w-3 h-3 text-amber-500" /> QR Verified
                         </span>
@@ -342,7 +344,7 @@ export const StudentManagement: React.FC = () => {
                           In Review
                         </span>
                       ) : (
-                        <span className="text-[11px] text-slate-400">Not Eligible</span>
+                        <span className="text-[11px] text-slate-500 font-medium">In Training</span>
                       )}
                     </td>
 

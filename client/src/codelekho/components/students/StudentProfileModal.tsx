@@ -34,11 +34,9 @@ export const StudentProfileModal: React.FC = () => {
         {/* Profile Card Overlay */}
         <div className="px-6 -mt-8 relative z-10 flex items-end justify-between">
           <div className="flex items-end gap-3.5">
-            <img 
-              src={st.avatar} 
-              alt={st.name} 
-              className="w-16 h-16 rounded-2xl object-cover border-4 border-white shadow-md"
-            />
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white font-extrabold text-xl flex items-center justify-center border-4 border-white shadow-md uppercase">
+              {st.name.trim().slice(0, 2)}
+            </div>
             <div className="pb-1">
               <h2 className="text-lg font-bold text-slate-800">{st.name}</h2>
               <p className="text-xs text-slate-500 font-medium">{st.track} Specialization Fellow</p>

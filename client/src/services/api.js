@@ -122,5 +122,16 @@ export const api = {
   // Clients
   getClients: () => request('/clients'),
   createClient: (payload) => request('/clients', { method: 'POST', body: JSON.stringify(payload) }),
+
+  // Integrations & Central Management
+  getIntegrations: () => request('/integrations'),
+  getIntegrationByKey: (key) => request(`/integrations/${key}`),
+  testIntegration: (key) => request(`/integrations/${key}/test`, { method: 'POST' }),
+  syncIntegration: (key, syncType = 'FULL') => request(`/integrations/${key}/sync`, { method: 'POST', body: JSON.stringify({ syncType }) }),
+  updateIntegrationConfig: (key, config) => request(`/integrations/${key}/config`, { method: 'PUT', body: JSON.stringify({ config }) }),
+  getSyncJobs: (key) => request(`/integrations/${key}/jobs`),
+  getSyncLogs: (key, jobId = '', limit = 100) => request(`/integrations/${key}/logs?limit=${limit}${jobId ? `&jobId=${jobId}` : ''}`),
+  getSyncedRecords: (params = '') => request(`/integrations/records${params ? `?${params}` : ''}`),
+  getCentralAnalytics: (params = '') => request(`/integrations/analytics/overview${params ? `?${params}` : ''}`),
 };
 

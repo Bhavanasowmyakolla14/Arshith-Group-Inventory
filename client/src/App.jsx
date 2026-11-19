@@ -19,6 +19,8 @@ import { UsersPage } from './pages/UsersPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { AuditLogsPage } from './pages/AuditLogsPage';
 import { LoginPage } from './pages/LoginPage';
+import { CentralDashboardPage } from './pages/CentralDashboardPage';
+import { IntegrationsPage } from './pages/IntegrationsPage';
 import { CodeLekhoApp } from './codelekho/App';
 import { ArshithFreshApp } from './arshithfresh/App';
 
@@ -73,7 +75,7 @@ class ErrorBoundary extends React.Component {
 
 export function AppContent() {
   const { isAuthenticated, company } = useAuth();
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState('central-dashboard');
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [projectStatusFilter, setProjectStatusFilter] = useState('ALL');
   const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(0);
@@ -156,6 +158,12 @@ export function AppContent() {
         {/* Dynamic Page Router with Error Boundary */}
         <main className="flex-1 overflow-y-auto">
           <ErrorBoundary>
+            {activeTab === 'central-dashboard' && (
+              <CentralDashboardPage onNavigateToIntegrations={() => setActiveTab('integrations')} />
+            )}
+
+            {activeTab === 'integrations' && <IntegrationsPage />}
+
             {activeTab === 'dashboard' && (
               <DashboardPage
                 onNavigateToProjectsWithFilter={handleNavigateToProjectsWithFilter}

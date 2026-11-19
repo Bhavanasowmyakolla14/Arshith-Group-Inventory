@@ -81,25 +81,25 @@ export default function Dashboard() {
 
   // 9 Primary Supply Chain Pipeline Stages
   const supplyChainStages = [
-    { id: 'indent', label: '1. Purchase Indent', count: k.indentCount || 1, icon: Sparkles, color: 'text-sky-600 bg-sky-50 border-sky-200', link: '/purchases' },
-    { id: 'po', label: '2. PO Raised', count: k.pendingPurchaseOrders || 1, icon: FileSearch, color: 'text-indigo-600 bg-indigo-50 border-indigo-200', link: '/purchase-orders' },
-    { id: 'transit', label: '3. Vendor In Transit', count: k.transitCount || 1, icon: Truck, color: 'text-blue-600 bg-blue-50 border-blue-200', link: '/purchases' },
-    { id: 'grn', label: '4. Goods Received', count: k.grnsCount || 1, icon: PackageCheck, color: 'text-blue-700 bg-blue-50 border-blue-300', link: '/goods-received' },
-    { id: 'qc', label: '5. Quality Check', count: k.qcCount || 8, icon: FlaskConical, color: 'text-slate-700 bg-slate-100 border-slate-300', link: '/inventory' },
-    { id: 'stock', label: '6. Warehouse Stocked', count: k.totalProducts || 8, icon: Boxes, color: 'text-blue-900 bg-blue-100 border-blue-300', link: '/inventory' },
-    { id: 'packing', label: '7. Batch Packaging', count: k.batchesCount || 10, icon: Tags, color: 'text-amber-700 bg-amber-50 border-amber-200', link: '/batches' },
-    { id: 'dispatch', label: '8. Sales Dispatched', count: k.dispatchedSalesCount || 1, icon: Receipt, color: 'text-teal-700 bg-teal-50 border-teal-200', link: '/sales' },
-    { id: 'delivered', label: '9. Retail Delivered', count: k.deliveredSalesCount || 1, icon: CheckCircle2, color: 'text-teal-800 bg-teal-100 border-teal-300', link: '/sales' },
+    { id: 'indent', label: '1. Purchase Indent', count: 0, icon: Sparkles, color: 'text-sky-600 bg-sky-50 border-sky-200', link: '/purchases' },
+    { id: 'po', label: '2. PO Raised', count: k.pendingPurchaseOrders || 0, icon: FileSearch, color: 'text-indigo-600 bg-indigo-50 border-indigo-200', link: '/purchase-orders' },
+    { id: 'transit', label: '3. Vendor In Transit', count: 0, icon: Truck, color: 'text-blue-600 bg-blue-50 border-blue-200', link: '/purchases' },
+    { id: 'grn', label: '4. Goods Received', count: 0, icon: PackageCheck, color: 'text-blue-700 bg-blue-50 border-blue-300', link: '/goods-received' },
+    { id: 'qc', label: '5. Quality Check', count: 0, icon: FlaskConical, color: 'text-slate-700 bg-slate-100 border-slate-300', link: '/inventory' },
+    { id: 'stock', label: '6. Warehouse Stocked', count: k.totalProducts || 0, icon: Boxes, color: 'text-blue-900 bg-blue-100 border-blue-300', link: '/inventory' },
+    { id: 'packing', label: '7. Batch Packaging', count: 0, icon: Tags, color: 'text-amber-700 bg-amber-50 border-amber-200', link: '/batches' },
+    { id: 'dispatch', label: '8. Sales Dispatched', count: k.todaysSalesCount || 0, icon: Receipt, color: 'text-teal-700 bg-teal-50 border-teal-200', link: '/sales' },
+    { id: 'delivered', label: '9. Retail Delivered', count: k.todaysSalesCount || 0, icon: CheckCircle2, color: 'text-teal-800 bg-teal-100 border-teal-300', link: '/sales' },
   ];
 
   // 6 Inventory Governance & Exception Cards
   const governanceCards = [
-    { id: 'all-catalog', label: 'Total Catalog SKUs', count: k.totalProducts || 8, icon: Package, tag: 'Total Catalog', badgeColor: 'bg-[#101827] text-white', link: '/products' },
+    { id: 'all-catalog', label: 'Total Catalog SKUs', count: k.totalProducts || 0, icon: Package, tag: 'Total Catalog', badgeColor: 'bg-[#101827] text-white', link: '/products' },
     { id: 'low-stock', label: 'Low Stock Reorder Alert', count: k.lowStock || 0, icon: TrendingDown, tag: 'Reorder Gap', badgeColor: 'bg-amber-100 text-amber-900 border border-amber-300', link: '/inventory?state=LOW_STOCK' },
-    { id: 'quarantine', label: 'Batches In Quarantine', count: k.quarantineCount || 0, icon: PauseCircle, tag: 'Quarantine', badgeColor: 'bg-amber-100 text-amber-900 border border-amber-300', link: '/batches' },
+    { id: 'quarantine', label: 'Batches In Quarantine', count: 0, icon: PauseCircle, tag: 'Quarantine', badgeColor: 'bg-amber-100 text-amber-900 border border-amber-300', link: '/batches' },
     { id: 'expiring', label: 'Near Expiry Batches', count: k.expiring || 0, icon: CalendarClock, tag: 'Expiring Soon', badgeColor: 'bg-rose-100 text-rose-900 border border-rose-300', link: '/batches?state=near' },
-    { id: 'wastage', label: 'Approved Wastage & Scraps', count: qty(k.wastageQty) || '3', icon: Trash2, tag: 'Scrapped', badgeColor: 'bg-slate-100 text-slate-700 border border-slate-300', link: '/wastage' },
-    { id: 'returns', label: 'Customer / Vendor Returns', count: k.returnsCount || 2, icon: XCircle, tag: 'Vendor Return', badgeColor: 'bg-rose-50 text-rose-800 border border-rose-200', link: '/returns' },
+    { id: 'wastage', label: 'Approved Wastage & Scraps', count: qty(k.wastageQty) || '0', icon: Trash2, tag: 'Scrapped', badgeColor: 'bg-slate-100 text-slate-700 border border-slate-300', link: '/wastage' },
+    { id: 'returns', label: 'Customer / Vendor Returns', count: 0, icon: XCircle, tag: 'Vendor Return', badgeColor: 'bg-rose-50 text-rose-800 border border-rose-200', link: '/returns' },
   ];
 
   return (
@@ -278,7 +278,7 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="text-2xl font-black text-white font-sans tracking-tight">
-            {money ? inr(k.grossMarginValue || 14200, true) : '₹14.2K'}
+            ₹0
           </div>
           <div className="mt-3 space-y-2">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-500/20 text-sky-300 border border-blue-500/30">

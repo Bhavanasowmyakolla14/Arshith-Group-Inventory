@@ -593,3 +593,89 @@ model AuditLog {
   @@map("audit_logs")
 }
 
+// 25. External Integrations (Central Multi-Database Architecture)
+model Integration {
+  id                 String    @id @default(uuid())
+  key                String    @unique // arshithfresh, codelekho, arshith_infotech
+  name               String
+  description        String?
+  sourceType         String    @map("source_type") // MONGODB_ATLAS, SUPABASE_POSTGRES, REST_API
+  status             String    @default("PENDING_CONFIG") // CONNECTED, DISCONNECTED, PENDING_CONFIG, ERROR
+  config             Json?
+  lastTestAt         DateTime? @map("last_test_at")
+  lastTestSuccess    Boolean   @default(false) @map("last_test_success")
+  lastTestMessage    String?   @map("last_test_message")
+  lastSyncAt         DateTime? @map("last_sync_at")
+  lastSyncStatus     String?   @map("last_sync_status") // SUCCESS, FAILED, COMPLETED_WITH_ERRORS
+  syncedRecordsCount Int       @default(0) @map("synced_records_count")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  @@map("integrations")
+}
+
+// 26. Integration Sync Jobs (Universal Sync Framework)
+model IntegrationSyncJob {
+  id             String               @id @default(uuid())
+  integrationKey String               @map("integration_key")
+  sourceSystem   String               @map("source_system")
+  syncType       String               @default("FULL") @map("sync_type") // FULL, INCREMENTAL
+  status         String               @default("PENDING") // PENDING, RUNNING, COMPLETED, COMPLETED_WITH_ERRORS, FAILED
+  startTime      DateTime             @default(now()) @map("start_time")
+  endTime        DateTime?            @map("end_time")
+  totalFetched   Int                  @default(0) @map("total_fetched")
+  created        Int                  @default(0)
+  updated        Int                  @default(0)
+  skipped        Int                  @default(0)
+  failed         Int                  @default(0)
+  errorDetails   String?              @map("error_details")
+  logs           IntegrationSyncLog[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([integrationKey])
+  @@index([status])
+  @@map("integration_sync_jobs")
+}
+
+// 27. Integration Sync Logs
+model IntegrationSyncLog {
+  id             String              @id @default(uuid())
+  jobId          String?             @map("job_id")
+  job            IntegrationSyncJob? @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  integrationKey String              @map("integration_key")
+  level          String              @default("INFO") // INFO, WARN, ERROR, SUCCESS
+  message        String
+  details        Json?
+  createdAt      DateTime            @default(now()) @map("created_at")
+
+  @@index([jobId])
+  @@index([integrationKey])
+  @@map("integration_sync_logs")
+}
+
+// 28. Synced Business Records (Unified Central Storage with Source Ownership & Composite Uniqueness)
+model SyncedRecord {
+  id              String    @id @default(uuid())
+  compositeKey    String    @unique @map("composite_key") // sourceSystem:entityType:sourceRecordId
+  sourceSystem    String    @map("source_system") // arshithfresh, codelekho, arshith_infotech
+  entityType      String    @map("entity_type") // product, order, customer, supplier, course, learner, certificate, submission
+  sourceRecordId  String    @map("source_record_id")
+  name            String
+  category        String?
+  status          String?
+  amount          Decimal?  @db.Decimal(14, 2)
+  recordDate      DateTime? @map("record_date")
+  rawPayload      Json      @map("raw_payload")
+  syncTimestamp   DateTime  @default(now()) @map("sync_timestamp")
+  sourceCreatedAt DateTime? @map("source_created_at")
+  sourceUpdatedAt DateTime? @map("source_updated_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  @@index([sourceSystem])
+  @@index([entityType])
+  @@index([sourceSystem, entityType])
+  @@map("synced_records")
+}
+

@@ -1,21 +1,6 @@
 const TOKEN_KEY = 'afims_token';
-export const getToken = () => {
-  try {
-    return localStorage.getItem(TOKEN_KEY) || localStorage.getItem('arshith_auth_token') || 'demo_token_arshithfresh';
-  } catch {
-    return 'demo_token_arshithfresh';
-  }
-};
-export const setToken = (t) => {
-  try {
-    if (t) {
-      localStorage.setItem(TOKEN_KEY, t);
-      localStorage.setItem('arshith_auth_token', t);
-    } else {
-      localStorage.removeItem(TOKEN_KEY);
-    }
-  } catch {}
-};
+export const getToken = () => { try { return localStorage.getItem(TOKEN_KEY); } catch { return null; } };
+export const setToken = (t) => { try { t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY); } catch {} };
 
 export class ApiError extends Error { constructor(msg, status, data) { super(msg); this.status = status; this.data = data; } }
 

@@ -32,9 +32,16 @@ export const CourseManagement: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState('All');
 
   const filteredCourses = courses.filter((course) => {
-    const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          course.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          course.instructor.toLowerCase().includes(searchQuery.toLowerCase());
+    const title = course.title || '';
+    const code = course.code || course.id || '';
+    const inst = typeof course.instructor === 'object' && course.instructor !== null
+      ? (course.instructor as any).name || ''
+      : (typeof course.instructor === 'string' ? course.instructor : '');
+
+    const q = searchQuery.toLowerCase();
+    const matchesSearch = title.toLowerCase().includes(q) ||
+                          code.toLowerCase().includes(q) ||
+                          inst.toLowerCase().includes(q);
     const matchesTrack = filterTrack === 'All' || course.track === filterTrack;
     const matchesStatus = statusFilter === 'All' || course.status === statusFilter;
     return matchesSearch && matchesTrack && matchesStatus;
@@ -186,7 +193,9 @@ export const CourseManagement: React.FC = () => {
               {/* Card Footer Buttons */}
               <div className="flex items-center justify-between pt-3 border-t border-slate-100">
                 <div className="text-[11px] text-slate-500 truncate max-w-[150px]">
-                  {course.instructor}
+                  {typeof course.instructor === 'object' && course.instructor !== null
+                    ? (course.instructor as any).name
+                    : (course.instructor || 'Lead Educator')}
                 </div>
 
                 <div className="flex items-center gap-2">
