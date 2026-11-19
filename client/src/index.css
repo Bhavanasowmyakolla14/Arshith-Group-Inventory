@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #111827;
+    background-color: #F5F7FA;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Custom sleek scrollbars in silver/slate */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Premium Card & Surface Treatments */
+.card-premium {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px 0 rgba(16, 24, 39, 0.05), 0 1px 2px -1px rgba(16, 24, 39, 0.05);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-premium:hover {
+  border-color: #93C5FD;
+  box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.08), 0 8px 10px -6px rgba(37, 99, 235, 0.03);
+  transform: translateY(-2px);
+}
+
+.card-navy {
+  background: linear-gradient(135deg, #101827 0%, #1E293B 100%);
+  border: 1px solid #334155;
+  box-shadow: 0 10px 30px -5px rgba(16, 24, 39, 0.3);
+}
+
+/* Animated status pulse indicators */
+@keyframes status-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
+}
+
+.pulse-dot-blue {
+  animation: status-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 8px #2563EB;
+}
+
+.pulse-dot-amber {
+  animation: status-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 8px #F59E0B;
+}
+
+.pulse-dot-teal {
+  animation: status-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 8px #0D9488;
+}
+
+.pulse-dot-rose {
+  animation: status-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 8px #EF4444;
+}
+
+/* Gradient text accents in Blue / Sky */
+.text-gradient-blue {
+  background: linear-gradient(135deg, #2563EB 0%, #0EA5E9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Unified Enterprise Component Styling (Arshith Infotech Standard) */
+@layer components {
+  .card { @apply rounded-2xl border border-[#E2E8F0] bg-white shadow-sm; }
+  .eyebrow { @apply text-[11px] font-bold uppercase tracking-[0.14em] text-[#64748B] font-mono; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-3.5 py-2 text-xs font-semibold transition disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer; }
+  .btn-primary { @apply btn bg-[#2563EB] text-white shadow-sm shadow-blue-500/20 hover:bg-[#1D4ED8]; }
+  .btn-dark { @apply btn bg-[#101827] text-white hover:bg-slate-800; }
+  .btn-ghost { @apply btn border border-[#E2E8F0] bg-white text-[#111827] hover:bg-slate-50; }
+  .btn-danger { @apply btn bg-rose-600 text-white hover:bg-rose-700; }
+  .btn-sm { @apply px-2.5 py-1 text-xs; }
+  .input { @apply w-full rounded-xl border border-[#E2E8F0] bg-[#F5F7FA] px-3 py-2 text-xs text-[#111827] font-medium outline-none placeholder:text-[#64748B] focus:border-[#2563EB] focus:bg-white focus:ring-2 focus:ring-blue-500/20 transition-all; }
+  .th { @apply whitespace-nowrap px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.08em] text-[#64748B] font-mono bg-[#F8FAFC]; }
+  .td { @apply px-4 py-3 text-xs text-[#111827] font-medium; }
+  .tab { @apply whitespace-nowrap rounded-xl px-3 py-1.5 text-xs font-semibold transition cursor-pointer; }
+  .tab-on { @apply bg-[#2563EB] text-white shadow-sm; }
+  .tab-off { @apply border border-[#E2E8F0] bg-white text-[#64748B] hover:text-[#111827] hover:bg-slate-50; }
+}

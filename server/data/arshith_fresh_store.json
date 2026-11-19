@@ -1,0 +1,752 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "Cold-Pressed Oils",
+      "parentId": null,
+      "isActive": true
+    },
+    {
+      "id": 2,
+      "name": "Groundnut Oil",
+      "parentId": 1,
+      "isActive": true
+    },
+    {
+      "id": 3,
+      "name": "Sesame Oil",
+      "parentId": 1,
+      "isActive": true
+    },
+    {
+      "id": 4,
+      "name": "Coconut Oil",
+      "parentId": 1,
+      "isActive": true
+    },
+    {
+      "id": 5,
+      "name": "Sunflower Oil",
+      "parentId": 1,
+      "isActive": true
+    },
+    {
+      "id": 6,
+      "name": "Castor Oil",
+      "parentId": 1,
+      "isActive": true
+    },
+    {
+      "id": 7,
+      "name": "Dry Fruits and Nuts",
+      "parentId": null,
+      "isActive": true
+    },
+    {
+      "id": 8,
+      "name": "Cashews",
+      "parentId": 7,
+      "isActive": true
+    },
+    {
+      "id": 9,
+      "name": "Almonds",
+      "parentId": 7,
+      "isActive": true
+    },
+    {
+      "id": 10,
+      "name": "Figs",
+      "parentId": 7,
+      "isActive": true
+    },
+    {
+      "id": 11,
+      "name": "Raisins",
+      "parentId": 7,
+      "isActive": true
+    },
+    {
+      "id": 12,
+      "name": "Dry Seeds",
+      "parentId": null,
+      "isActive": true
+    },
+    {
+      "id": 13,
+      "name": "Flax Seeds",
+      "parentId": 12,
+      "isActive": true
+    },
+    {
+      "id": 14,
+      "name": "Chia Seeds",
+      "parentId": 12,
+      "isActive": true
+    },
+    {
+      "id": 15,
+      "name": "Pumpkin Seeds",
+      "parentId": 12,
+      "isActive": true
+    },
+    {
+      "id": 16,
+      "name": "Sunflower Seeds",
+      "parentId": 12,
+      "isActive": true
+    },
+    {
+      "id": 17,
+      "name": "Ghee and Honey",
+      "parentId": null,
+      "isActive": true
+    },
+    {
+      "id": 18,
+      "name": "Cow Ghee",
+      "parentId": 17,
+      "isActive": true
+    },
+    {
+      "id": 19,
+      "name": "Buffalo Ghee",
+      "parentId": 17,
+      "isActive": true
+    },
+    {
+      "id": 20,
+      "name": "Honey",
+      "parentId": 17,
+      "isActive": true
+    },
+    {
+      "id": 21,
+      "name": "Spice Powders",
+      "parentId": null,
+      "isActive": true
+    },
+    {
+      "id": 22,
+      "name": "Kandi Podi",
+      "parentId": 21,
+      "isActive": true
+    },
+    {
+      "id": 23,
+      "name": "Garlic Powder",
+      "parentId": 21,
+      "isActive": true
+    },
+    {
+      "id": 24,
+      "name": "Chilli Powder",
+      "parentId": 21,
+      "isActive": true
+    },
+    {
+      "id": 25,
+      "name": "Turmeric Powder",
+      "parentId": 21,
+      "isActive": true
+    }
+  ],
+  "warehouses": [
+    {
+      "id": 1,
+      "warehouseCode": "AF-W01",
+      "name": "Main Warehouse",
+      "location": "Head Office - Hyderabad Agro Complex",
+      "isDefault": true,
+      "managerId": 1,
+      "capacity": 10000,
+      "capacityUnit": "kg",
+      "isActive": true
+    },
+    {
+      "id": 2,
+      "warehouseCode": "AF-W02",
+      "name": "Cold Storage Unit 1",
+      "location": "Agro Logistics Park, Secunderabad",
+      "isDefault": false,
+      "managerId": 1,
+      "capacity": 5000,
+      "capacityUnit": "kg",
+      "isActive": true
+    }
+  ],
+  "suppliers": [
+    {
+      "id": 1,
+      "supplierCode": "AFS-001",
+      "name": "Telangana Organic Farmers Co-op",
+      "contactPerson": "Ramesh Reddy",
+      "phone": "+91 98480 12345",
+      "email": "ramesh@tofc.in",
+      "address": "Plot 45, Agro Park",
+      "city": "Hyderabad",
+      "state": "Telangana",
+      "pincode": "500081",
+      "gstin": "36AABCT1332L1Z5",
+      "pan": "AABCT1332L",
+      "bankName": "HDFC Bank",
+      "accountNumber": "50200012345678",
+      "ifsc": "HDFC0001234",
+      "paymentTerms": "NET30",
+      "status": "ACTIVE",
+      "products": []
+    },
+    {
+      "id": 2,
+      "supplierCode": "AFS-002",
+      "name": "Deccan Honey & Apiary Farms",
+      "contactPerson": "Suresh Kumar",
+      "phone": "+91 98480 54321",
+      "email": "suresh@deccanhoney.com",
+      "address": "Survey 112, Medchal",
+      "city": "Hyderabad",
+      "state": "Telangana",
+      "pincode": "501401",
+      "gstin": "36BBCDE2241M1Z8",
+      "pan": "BBCDE2241M",
+      "bankName": "State Bank of India",
+      "accountNumber": "20199887766",
+      "ifsc": "SBIN0004567",
+      "paymentTerms": "NET15",
+      "status": "ACTIVE",
+      "products": []
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "productCode": "AFP-0001",
+      "name": "Pure Cold-Pressed Groundnut Oil",
+      "sku": "GNO-1L",
+      "barcode": "8901234560012",
+      "categoryId": 1,
+      "subcategoryId": 2,
+      "unit": "litre",
+      "packSize": "1 Litre Bottle",
+      "purchasePrice": 180,
+      "sellingPrice": 260,
+      "gstPercent": 5,
+      "minStockLevel": 20,
+      "reorderQty": 50,
+      "shelfLifeDays": 180,
+      "preferredSupplierId": 1,
+      "status": "ACTIVE",
+      "websiteProductId": "wp-001",
+      "imageUrl": null,
+      "description": "100% natural, wood-churned cold-pressed groundnut oil, unrefined and nutrient-rich."
+    },
+    {
+      "id": 2,
+      "productCode": "AFP-0002",
+      "name": "Organic Wood-Pressed Sesame Oil",
+      "sku": "SES-1L",
+      "barcode": "8901234560029",
+      "categoryId": 1,
+      "subcategoryId": 3,
+      "unit": "litre",
+      "packSize": "1 Litre Bottle",
+      "purchasePrice": 240,
+      "sellingPrice": 340,
+      "gstPercent": 5,
+      "minStockLevel": 15,
+      "reorderQty": 40,
+      "shelfLifeDays": 180,
+      "preferredSupplierId": 1,
+      "status": "ACTIVE",
+      "websiteProductId": "wp-002",
+      "imageUrl": null,
+      "description": "Authentic gingelly sesame oil prepared with palm jaggery in traditional wooden expeller."
+    },
+    {
+      "id": 3,
+      "productCode": "AFP-0003",
+      "name": "Desi Cow A2 Cultured Bilona Ghee",
+      "sku": "GHEE-500G",
+      "barcode": "8901234560036",
+      "categoryId": 17,
+      "subcategoryId": 18,
+      "unit": "bottle",
+      "packSize": "500 g Glass Jar",
+      "purchasePrice": 450,
+      "sellingPrice": 699,
+      "gstPercent": 12,
+      "minStockLevel": 10,
+      "reorderQty": 30,
+      "shelfLifeDays": 365,
+      "preferredSupplierId": 1,
+      "status": "ACTIVE",
+      "websiteProductId": "wp-003",
+      "imageUrl": null,
+      "description": "Traditional Vedic Bilona method A2 Gir Cow cultured ghee, aromatic and golden granulated."
+    },
+    {
+      "id": 4,
+      "productCode": "AFP-0004",
+      "name": "Premium Jumbo Cashews (W320)",
+      "sku": "CSH-500G",
+      "barcode": "8901234560043",
+      "categoryId": 7,
+      "subcategoryId": 8,
+      "unit": "packet",
+      "packSize": "500 g Pouch",
+      "purchasePrice": 380,
+      "sellingPrice": 550,
+      "gstPercent": 5,
+      "minStockLevel": 15,
+      "reorderQty": 30,
+      "shelfLifeDays": 240,
+      "preferredSupplierId": 1,
+      "status": "ACTIVE",
+      "websiteProductId": "wp-004",
+      "imageUrl": null,
+      "description": "Crisp, whole Grade W320 cashews packed in nitrogen-flushed pouch for maximum freshness."
+    },
+    {
+      "id": 5,
+      "productCode": "AFP-0005",
+      "name": "Raw Organic Wild Forest Honey",
+      "sku": "HNY-500G",
+      "barcode": "8901234560050",
+      "categoryId": 17,
+      "subcategoryId": 20,
+      "unit": "bottle",
+      "packSize": "500 g Glass Jar",
+      "purchasePrice": 220,
+      "sellingPrice": 360,
+      "gstPercent": 5,
+      "minStockLevel": 12,
+      "reorderQty": 25,
+      "shelfLifeDays": 730,
+      "preferredSupplierId": 2,
+      "status": "ACTIVE",
+      "websiteProductId": "wp-005",
+      "imageUrl": null,
+      "description": "Unprocessed, unprocessed wild floral nectar honey harvested sustainably from Eastern Ghats."
+    }
+  ],
+  "batches": [
+    {
+      "id": 1,
+      "batchCode": "AFB-2026-001",
+      "productId": 1,
+      "warehouseId": 1,
+      "supplierId": 1,
+      "initialQty": 100,
+      "availableQty": 85,
+      "reservedQty": 5,
+      "damagedQty": 0,
+      "purchasePrice": 180,
+      "mfgDate": "2026-09-30T18:30:00.000Z",
+      "expiryDate": "2027-03-31T18:30:00.000Z",
+      "qualityStatus": "APPROVED"
+    },
+    {
+      "id": 2,
+      "batchCode": "AFB-2026-002",
+      "productId": 2,
+      "warehouseId": 1,
+      "supplierId": 1,
+      "initialQty": 80,
+      "availableQty": 60,
+      "reservedQty": 4,
+      "damagedQty": 0,
+      "purchasePrice": 240,
+      "mfgDate": "2026-10-14T18:30:00.000Z",
+      "expiryDate": "2027-04-14T18:30:00.000Z",
+      "qualityStatus": "APPROVED"
+    },
+    {
+      "id": 3,
+      "batchCode": "AFB-2026-003",
+      "productId": 3,
+      "warehouseId": 1,
+      "supplierId": 1,
+      "initialQty": 50,
+      "availableQty": 38,
+      "reservedQty": 2,
+      "damagedQty": 0,
+      "purchasePrice": 450,
+      "mfgDate": "2026-09-09T18:30:00.000Z",
+      "expiryDate": "2027-09-09T18:30:00.000Z",
+      "qualityStatus": "APPROVED"
+    },
+    {
+      "id": 4,
+      "batchCode": "AFB-2026-004",
+      "productId": 4,
+      "warehouseId": 1,
+      "supplierId": 1,
+      "initialQty": 60,
+      "availableQty": 45,
+      "reservedQty": 0,
+      "damagedQty": 0,
+      "purchasePrice": 380,
+      "mfgDate": "2026-10-19T18:30:00.000Z",
+      "expiryDate": "2027-06-19T18:30:00.000Z",
+      "qualityStatus": "APPROVED"
+    },
+    {
+      "id": 5,
+      "batchCode": "AFB-2026-005",
+      "productId": 5,
+      "warehouseId": 1,
+      "supplierId": 2,
+      "initialQty": 70,
+      "availableQty": 52,
+      "reservedQty": 3,
+      "damagedQty": 0,
+      "purchasePrice": 220,
+      "mfgDate": "2026-10-04T18:30:00.000Z",
+      "expiryDate": "2028-10-04T18:30:00.000Z",
+      "qualityStatus": "APPROVED"
+    }
+  ],
+  "roles": [
+    {
+      "id": 1,
+      "name": "SUPER_ADMIN",
+      "label": "Super Admin",
+      "permissions": [
+        "product.view",
+        "product.manage",
+        "product.import",
+        "category.manage",
+        "supplier.view",
+        "supplier.manage",
+        "supplier.bank",
+        "purchase.view",
+        "purchase.create",
+        "purchase.approve",
+        "grn.manage",
+        "inventory.view",
+        "inventory.adjust",
+        "inventory.approve",
+        "batch.manage",
+        "warehouse.manage",
+        "transfer.manage",
+        "transfer.approve",
+        "order.view",
+        "order.manage",
+        "order.manual",
+        "return.manage",
+        "return.approve",
+        "wastage.manage",
+        "wastage.approve",
+        "finance.view",
+        "finance.payment",
+        "report.view",
+        "report.finance",
+        "integration.manage",
+        "user.manage",
+        "settings.manage",
+        "audit.view"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "INVENTORY_MANAGER",
+      "label": "Inventory Manager",
+      "permissions": [
+        "product.view",
+        "product.manage",
+        "product.import",
+        "category.manage",
+        "supplier.view",
+        "purchase.view",
+        "inventory.view",
+        "inventory.adjust",
+        "batch.manage",
+        "warehouse.manage",
+        "transfer.manage",
+        "transfer.approve",
+        "order.view",
+        "return.manage",
+        "wastage.manage",
+        "report.view"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "PURCHASE_MANAGER",
+      "label": "Purchase Manager",
+      "permissions": [
+        "product.view",
+        "supplier.view",
+        "supplier.manage",
+        "purchase.view",
+        "purchase.create",
+        "grn.manage",
+        "inventory.view",
+        "return.manage",
+        "report.view"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "WAREHOUSE_STAFF",
+      "label": "Warehouse Staff",
+      "permissions": [
+        "product.view",
+        "purchase.view",
+        "grn.manage",
+        "inventory.view",
+        "inventory.adjust",
+        "transfer.manage",
+        "order.view",
+        "order.manage",
+        "wastage.manage",
+        "return.manage"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "SALES_STAFF",
+      "label": "Sales Staff",
+      "permissions": [
+        "product.view",
+        "inventory.view",
+        "order.view",
+        "order.manage",
+        "order.manual",
+        "return.manage"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "FINANCE_MANAGER",
+      "label": "Finance Manager",
+      "permissions": [
+        "product.view",
+        "supplier.view",
+        "supplier.bank",
+        "purchase.view",
+        "inventory.view",
+        "order.view",
+        "finance.view",
+        "finance.payment",
+        "report.view",
+        "report.finance",
+        "audit.view"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "Farook",
+      "email": "admin@arshithfresh.com",
+      "phone": "+91 98765 43210",
+      "roleId": 1,
+      "role": {
+        "id": 1,
+        "name": "SUPER_ADMIN",
+        "label": "Super Admin"
+      },
+      "roleLabel": "Super Admin",
+      "permissions": [
+        "product.view",
+        "product.manage",
+        "product.import",
+        "category.manage",
+        "supplier.view",
+        "supplier.manage",
+        "supplier.bank",
+        "purchase.view",
+        "purchase.create",
+        "purchase.approve",
+        "grn.manage",
+        "inventory.view",
+        "inventory.adjust",
+        "inventory.approve",
+        "batch.manage",
+        "warehouse.manage",
+        "transfer.manage",
+        "transfer.approve",
+        "order.view",
+        "order.manage",
+        "order.manual",
+        "return.manage",
+        "return.approve",
+        "wastage.manage",
+        "wastage.approve",
+        "finance.view",
+        "finance.payment",
+        "report.view",
+        "report.finance",
+        "integration.manage",
+        "user.manage",
+        "settings.manage",
+        "audit.view"
+      ],
+      "isActive": true,
+      "lastLoginAt": "2026-11-18T11:46:49.842Z",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    }
+  ],
+  "settings": {
+    "companyName": "Arshith Fresh India Pvt. Ltd.",
+    "nearExpiryDays": 30,
+    "criticalExpiryDays": 7,
+    "fulfillmentDeductStage": "DISPATCHED",
+    "autoReserveWebsiteOrders": true,
+    "allowNegativeStock": false,
+    "websiteBaseUrl": "https://arshithfresh.com",
+    "websitePullOrders": false,
+    "websitePushStock": false,
+    "websitePollMinutes": 10,
+    "lowStockCheckHours": 6
+  },
+  "purchases": [
+    {
+      "id": 1,
+      "poNumber": "AF-PO-2026-0001",
+      "supplierId": 1,
+      "warehouseId": 1,
+      "expectedDate": "2026-11-22T18:30:00.000Z",
+      "orderDate": "2026-11-14T18:30:00.000Z",
+      "notes": "Urgent restocking for seasonal festival demand",
+      "subtotal": 18000,
+      "gstAmount": 900,
+      "totalAmount": 18900,
+      "paid": 18900,
+      "status": "RECEIVED",
+      "createdById": 1,
+      "createdByName": "Farook",
+      "items": [
+        {
+          "id": 1,
+          "productId": 1,
+          "quantity": 100,
+          "rate": 180,
+          "gstPercent": 5,
+          "gstAmount": 900,
+          "lineTotal": 18900
+        }
+      ],
+      "grns": [],
+      "payments": []
+    }
+  ],
+  "grns": [],
+  "supplierPayments": [],
+  "orders": [
+    {
+      "id": 1,
+      "orderNumber": "AF-SO-2026-0001",
+      "source": "WEBSITE",
+      "websiteOrderId": "WO-8821",
+      "customerName": "Anand Varma",
+      "customerPhone": "+91 98490 88210",
+      "customerEmail": "anand.varma@gmail.com",
+      "shippingAddress": "Flat 402, Green Meadows, Gachibowli, Hyderabad, Telangana 500032",
+      "warehouseId": 1,
+      "orderDate": "2026-11-16T18:30:00.000Z",
+      "status": "CONFIRMED",
+      "paymentStatus": "PAID",
+      "paymentMethod": "UPI",
+      "fulfillmentStatus": "PROCESSING",
+      "subtotal": 1219,
+      "discount": 50,
+      "shippingCharge": 0,
+      "totalAmount": 1169,
+      "notes": "Please pack in eco-friendly protective box",
+      "items": [
+        {
+          "id": 1,
+          "productId": 1,
+          "productName": "Pure Cold-Pressed Groundnut Oil",
+          "quantity": 2,
+          "unitPrice": 260,
+          "lineTotal": 520
+        },
+        {
+          "id": 2,
+          "productId": 3,
+          "productName": "Desi Cow A2 Cultured Bilona Ghee",
+          "quantity": 1,
+          "unitPrice": 699,
+          "lineTotal": 699
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "orderNumber": "AF-SO-2026-0002",
+      "source": "MANUAL",
+      "websiteOrderId": null,
+      "customerName": "Meenakshi Sundaram",
+      "customerPhone": "+91 94401 22334",
+      "customerEmail": "meenakshi.s@outlook.com",
+      "shippingAddress": "House 12, Road 4, Banjara Hills, Hyderabad, Telangana 500034",
+      "warehouseId": 1,
+      "orderDate": "2026-11-15T18:30:00.000Z",
+      "status": "DELIVERED",
+      "paymentStatus": "PAID",
+      "paymentMethod": "Credit Card",
+      "fulfillmentStatus": "DELIVERED",
+      "subtotal": 1250,
+      "discount": 0,
+      "shippingCharge": 50,
+      "totalAmount": 1300,
+      "notes": "Deliver before 5 PM",
+      "items": [
+        {
+          "id": 3,
+          "productId": 4,
+          "productName": "Premium Jumbo Cashews (W320)",
+          "quantity": 1,
+          "unitPrice": 550,
+          "lineTotal": 550
+        },
+        {
+          "id": 4,
+          "productId": 5,
+          "productName": "Raw Organic Wild Forest Honey",
+          "quantity": 1,
+          "unitPrice": 360,
+          "lineTotal": 360
+        },
+        {
+          "id": 5,
+          "productId": 2,
+          "productName": "Organic Wood-Pressed Sesame Oil",
+          "quantity": 1,
+          "unitPrice": 340,
+          "lineTotal": 340
+        }
+      ]
+    }
+  ],
+  "returns": [],
+  "wastage": [],
+  "adjustments": [],
+  "transfers": [],
+  "stockMovements": [],
+  "notifications": [
+    {
+      "id": 1,
+      "title": "Welcome to Arshith Fresh IMS",
+      "message": "All inventory pipelines, batch tracking, and warehouse operations are active.",
+      "severity": "SUCCESS",
+      "isRead": false,
+      "createdAt": "2026-11-18T11:46:49.840Z"
+    }
+  ],
+  "audit": [
+    {
+      "id": 1,
+      "userId": 1,
+      "userName": "Farook",
+      "entity": "system",
+      "entityId": "init",
+      "action": "INITIALIZE",
+      "createdAt": "2026-11-18T11:46:49.840Z"
+    }
+  ],
+  "webhookEvents": []
+}

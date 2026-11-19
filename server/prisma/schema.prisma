@@ -1,0 +1,595 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 1. Roles
+model Role {
+  id          String       @id @default(uuid())
+  name        String       @unique // SUPER_ADMIN, PROJECT_MANAGER, TEAM_LEAD, EMPLOYEE, FINANCE_MANAGER
+  description String?
+  permissions Permission[]
+  users       User[]
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  @@map("roles")
+}
+
+// 2. Permissions
+model Permission {
+  id          String   @id @default(uuid())
+  roleId      String   @map("role_id")
+  role        Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  module      String   // projects, employees, finance, tasks, documents, reports, users, settings
+  canCreate   Boolean  @default(false) @map("can_create")
+  canRead     Boolean  @default(true)  @map("can_read")
+  canUpdate   Boolean  @default(false) @map("can_update")
+  canDelete   Boolean  @default(false) @map("can_delete")
+  canApprove  Boolean  @default(false) @map("can_approve")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([roleId, module])
+  @@map("permissions")
+}
+
+// 3. Users (System Accounts)
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  passwordHash String        @map("password_hash")
+  name         String
+  roleName     String        @default("EMPLOYEE") @map("role_name")
+  roleId       String?       @map("role_id")
+  role         Role?         @relation(fields: [roleId], references: [id], onDelete: SetNull)
+  department   String?
+  designation  String?
+  phone        String?
+  avatarUrl    String?       @map("avatar_url")
+  isActive     Boolean       @default(true) @map("is_active")
+  employeeId   String?       @unique @map("employee_id")
+  employee     Employee?     @relation(fields: [employeeId], references: [id], onDelete: SetNull)
+  
+  // Relations
+  managedProjects      Project[]             @relation("ProjectManager")
+  statusHistoryChanges ProjectStatusHistory[] @relation("StatusChanger")
+  taskComments         TaskComment[]
+  uploadedDocuments    ProjectDocument[]     @relation("DocUploader")
+  activityLogs         ProjectActivityLog[]  @relation("ActivityUser")
+  auditLogs            AuditLog[]            @relation("AuditUser")
+  notifications        Notification[]
+  enteredExpenses      ProjectExpense[]      @relation("ExpenseEnteredBy")
+  approvedExpenses     ProjectExpense[]      @relation("ExpenseApprovedBy")
+  createdBudgets       ProjectBudget[]       @relation("BudgetCreator")
+  receivedPayments     ClientPayment[]       @relation("PaymentReceiver")
+  heldProjects         ProjectHold[]         @relation("HoldResponsible")
+  assignedTasks        ProjectTask[]         @relation("TaskCreator")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+// 4. Employees (HR Records - strictly reused)
+model Employee {
+  id                 String              @id @default(uuid())
+  empId              String              @unique @map("emp_id") // e.g. "EMP-0101"
+  name               String
+  email              String              @unique
+  phone              String?
+  department         String              // Engineering, Design, QA, DevOps, Management, Finance
+  designation        String              // Senior Full Stack Dev, UI Lead, etc.
+  skills             String[]            // ["React", "Node.js", "PostgreSQL", "Docker"]
+  experienceYears    Int                 @default(0) @map("experience_years")
+  joinDate           DateTime?           @map("join_date")
+  hourlyRate         Decimal?            @map("hourly_rate") @db.Decimal(12, 2)
+  maxActiveProjects  Int                 @default(3) @map("max_active_projects")
+  status             String              @default("ACTIVE") // ACTIVE, ON_LEAVE, RESIGNED
+  
+  // Relations
+  user               User?
+  assignments        ProjectAssignment[]
+  assignedTasks      ProjectTask[]       @relation("EmployeeAssignedTasks")
+  milestonesLead     ProjectMilestone[]  @relation("MilestoneLead")
+  timeEntries        ProjectTimeEntry[]  @relation("EmployeeTimeEntries")
+  responsibleRisks   ProjectRisk[]       @relation("RiskResponsible")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("employees")
+}
+
+// 5. Clients
+model Client {
+  id            String    @id @default(uuid())
+  clientId      String    @unique @map("client_id") // e.g. "CLI-1001"
+  companyName   String    @map("company_name")
+  contactPerson String    @map("contact_person")
+  email         String
+  phone         String?
+  address       String?
+  industry      String?
+  notes         String?
+  projects      Project[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("clients")
+}
+
+// 6. Project Categories
+model ProjectCategory {
+  id          String    @id @default(uuid())
+  name        String    @unique // Enterprise Web, Mobile App, Cloud Migration, AI/ML, SaaS, ERP/CRM
+  description String?
+  projects    Project[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("project_categories")
+}
+
+// 7. Projects (Main Model)
+model Project {
+  id                     String    @id @default(uuid())
+  projectId              String    @unique @map("project_id") // e.g. "AIP-2026-001"
+  title                  String
+  description            String?
+  
+  // Relations
+  clientId               String    @map("client_id")
+  client                 Client    @relation(fields: [clientId], references: [id])
+  
+  categoryId             String?   @map("category_id")
+  category               ProjectCategory? @relation(fields: [categoryId], references: [id])
+  
+  projectManagerId       String?   @map("project_manager_id")
+  projectManager         User?     @relation("ProjectManager", fields: [projectManagerId], references: [id])
+
+  // Category & Type metadata
+  categoryName           String?   @map("category_name")
+  projectType            String    @default("FIXED_PRICE") @map("project_type") // FIXED_PRICE, TIME_AND_MATERIALS, DEDICATED_TEAM, INTERNAL
+  projectSource          String    @default("DIRECT_CLIENT") @map("project_source") // DIRECT_CLIENT, REFERRAL, RFP, TENDER, UPWORK
+  priority               String    @default("MEDIUM") // LOW, MEDIUM, HIGH, CRITICAL
+
+  // Status & Lifecycle (12 workflow stages)
+  status                 String    @default("NEW") 
+  // NEW, UNDER_REVIEW, ACCEPTED, REJECTED, APPROVED, ASSIGNED, IN_PROGRESS, ON_HOLD, TESTING, COMPLETED, DELIVERED, CANCELLED
+  completionPercentage   Int       @default(0) @map("completion_percentage")
+  currentPhase           String    @default("Initiation") @map("current_phase")
+  internalRemarks        String?   @map("internal_remarks")
+
+  // Timeline
+  receivedDate           DateTime? @map("received_date")
+  acceptedDate           DateTime? @map("accepted_date")
+  plannedStartDate       DateTime? @map("planned_start_date")
+  actualStartDate        DateTime? @map("actual_start_date")
+  expectedCompletionDate DateTime? @map("expected_completion_date")
+  revisedCompletionDate  DateTime? @map("revised_completion_date")
+  actualCompletionDate   DateTime? @map("actual_completion_date")
+  deliveryDate           DateTime? @map("delivery_date")
+
+  // Financial Details (All suitable Decimals)
+  proposedBudget         Decimal   @default(0.00) @map("proposed_budget") @db.Decimal(14, 2)
+  approvedBudget         Decimal   @default(0.00) @map("approved_budget") @db.Decimal(14, 2)
+  advanceReceived        Decimal   @default(0.00) @map("advance_received") @db.Decimal(14, 2)
+  totalReceived          Decimal   @default(0.00) @map("total_received") @db.Decimal(14, 2)
+  clientPendingPayment   Decimal   @default(0.00) @map("client_pending_payment") @db.Decimal(14, 2)
+  estimatedDevCost       Decimal   @default(0.00) @map("estimated_dev_cost") @db.Decimal(14, 2)
+  actualDevCost          Decimal   @default(0.00) @map("actual_dev_cost") @db.Decimal(14, 2)
+  employeeCost           Decimal   @default(0.00) @map("employee_cost") @db.Decimal(14, 2)
+  softwareInfraCost      Decimal   @default(0.00) @map("software_infra_cost") @db.Decimal(14, 2)
+  otherExpenses          Decimal   @default(0.00) @map("other_expenses") @db.Decimal(14, 2)
+  remainingBudget        Decimal   @default(0.00) @map("remaining_budget") @db.Decimal(14, 2)
+  profitOrLoss           Decimal   @default(0.00) @map("profit_or_loss") @db.Decimal(14, 2)
+
+  // Scope & Requirements
+  objective              String?
+  scope                  String?
+  functionalRequirements String?   @map("functional_requirements")
+  technicalRequirements  String?   @map("technical_requirements")
+  deliverables           String?
+  expectedOutcome        String?   @map("expected_outcome")
+  requiredTechnologies   String[]  @map("required_technologies")
+  dependencies           String?
+  specialInstructions    String?   @map("special_instructions")
+
+  // Delivery & Handover details
+  deploymentUrl          String?   @map("deployment_url")
+  gitRepoUrl             String?   @map("git_repo_url")
+  finalReportUrl         String?   @map("final_report_url")
+  handoverDocsUrl        String?   @map("handover_docs_url")
+  warrantyDetails        String?   @map("warranty_details")
+  clientAcceptance       Boolean   @default(false) @map("client_acceptance")
+
+  // Archival
+  isArchived             Boolean   @default(false) @map("is_archived")
+  archivedAt             DateTime? @map("archived_at")
+  archiveReason          String?   @map("archive_reason")
+
+  // Relations
+  statusHistory          ProjectStatusHistory[]
+  assignments            ProjectAssignment[]
+  documents              ProjectDocument[]
+  tasks                  ProjectTask[]
+  milestones             ProjectMilestone[]
+  budgets                ProjectBudget[]
+  expenses               ProjectExpense[]
+  clientPayments         ClientPayment[]
+  holds                  ProjectHold[]
+  risks                  ProjectRisk[]
+  issues                 ProjectIssue[]
+  activityLogs           ProjectActivityLog[]
+  timeEntries            ProjectTimeEntry[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([priority])
+  @@index([clientId])
+  @@index([expectedCompletionDate])
+  @@map("projects")
+}
+
+// 8. Project Status History (Audit trail of every status transition)
+model ProjectStatusHistory {
+  id             String   @id @default(uuid())
+  projectId      String   @map("project_id")
+  project        Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  previousStatus String   @map("previous_status")
+  newStatus      String   @map("new_status")
+  changedById    String?  @map("changed_by_id")
+  changedBy      User?    @relation("StatusChanger", fields: [changedById], references: [id])
+  changeReason   String?  @map("change_reason")
+  remarks        String?
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@index([projectId])
+  @@map("project_status_history")
+}
+
+// 9. Project Assignments (Employee allocations)
+model ProjectAssignment {
+  id                   String    @id @default(uuid())
+  projectId            String    @map("project_id")
+  project              Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  employeeId           String    @map("employee_id")
+  employee             Employee  @relation(fields: [employeeId], references: [id])
+  projectRole          String    @map("project_role") 
+  // Project Manager, Team Lead, Frontend Developer, Backend Developer, Full Stack Developer, UI/UX Designer, Database Developer, Tester, DevOps Engineer
+  responsibilities     String?
+  allocationPercentage Int       @default(100) @map("allocation_percentage")
+  assignedDate         DateTime  @default(now()) @map("assigned_date")
+  expectedReleaseDate  DateTime? @map("expected_release_date")
+  actualReleaseDate    DateTime? @map("actual_release_date")
+  assignmentStatus     String    @default("ACTIVE") @map("assignment_status") // ACTIVE, COMPLETED, RELEASED, REASSIGNED
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([projectId, employeeId, projectRole])
+  @@map("project_assignments")
+}
+
+// 10. Project Tasks
+model ProjectTask {
+  id                   String           @id @default(uuid())
+  taskId               String           @map("task_id") // e.g. "TSK-001"
+  projectId            String           @map("project_id")
+  project              Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title                String
+  description          String?
+  assignedEmployeeId   String?          @map("assigned_employee_id")
+  assignedEmployee     Employee?        @relation("EmployeeAssignedTasks", fields: [assignedEmployeeId], references: [id])
+  createdById          String?          @map("created_by_id")
+  createdBy            User?            @relation("TaskCreator", fields: [createdById], references: [id])
+  priority             String           @default("MEDIUM") // LOW, MEDIUM, HIGH, CRITICAL
+  status               String           @default("TO_DO") // TO_DO, ASSIGNED, IN_PROGRESS, IN_REVIEW, BLOCKED, COMPLETED
+  plannedStartDate     DateTime?        @map("planned_start_date")
+  dueDate              DateTime?        @map("due_date")
+  actualCompletedDate  DateTime?        @map("actual_completed_date")
+  completionPercentage Int              @default(0) @map("completion_percentage")
+  estimatedHours       Decimal?         @map("estimated_hours") @db.Decimal(8, 2)
+  actualHoursSpent     Decimal?         @default(0.00) @map("actual_hours_spent") @db.Decimal(8, 2)
+  
+  comments             TaskComment[]
+  attachments          TaskAttachment[]
+  timeEntries          ProjectTimeEntry[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([projectId])
+  @@index([assignedEmployeeId])
+  @@map("project_tasks")
+}
+
+// 11. Task Comments
+model TaskComment {
+  id        String      @id @default(uuid())
+  taskId    String      @map("task_id")
+  task      ProjectTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  userId    String      @map("user_id")
+  user      User        @relation(fields: [userId], references: [id])
+  comment   String
+  createdAt DateTime    @default(now()) @map("created_at")
+
+  @@map("task_comments")
+}
+
+// 12. Task Attachments
+model TaskAttachment {
+  id        String      @id @default(uuid())
+  taskId    String      @map("task_id")
+  task      ProjectTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  fileName  String      @map("file_name")
+  fileUrl   String      @map("file_url")
+  fileSize  Int?        @map("file_size")
+  fileType  String?     @map("file_type")
+  createdAt DateTime    @default(now()) @map("created_at")
+
+  @@map("task_attachments")
+}
+
+// 13. Project Milestones
+model ProjectMilestone {
+  id                    String    @id @default(uuid())
+  milestoneId           String    @map("milestone_id") // e.g. "MS-01"
+  projectId             String    @map("project_id")
+  project               Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name                  String
+  description           String?
+  plannedDate           DateTime  @map("planned_date")
+  actualDate            DateTime? @map("actual_date")
+  completionStatus      String    @default("PENDING") @map("completion_status") // PENDING, IN_PROGRESS, COMPLETED, DELAYED
+  responsibleEmployeeId String?   @map("responsible_employee_id")
+  responsibleEmployee   Employee? @relation("MilestoneLead", fields: [responsibleEmployeeId], references: [id])
+  remarks               String?
+  orderIndex            Int       @default(0) @map("order_index")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([projectId])
+  @@map("project_milestones")
+}
+
+// 14. Project Budgets (Category-level allocations)
+model ProjectBudget {
+  id              String   @id @default(uuid())
+  projectId       String   @map("project_id")
+  project         Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  category        String   // Development, Design, Infrastructure, Software Licenses, QA, Buffer
+  allocatedAmount Decimal  @map("allocated_amount") @db.Decimal(14, 2)
+  revisedAmount   Decimal? @map("revised_amount") @db.Decimal(14, 2)
+  notes           String?
+  createdById     String?  @map("created_by_id")
+  createdBy       User?    @relation("BudgetCreator", fields: [createdById], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("project_budgets")
+}
+
+// 15. Project Expenses
+model ProjectExpense {
+  id              String    @id @default(uuid())
+  expenseId       String    @unique @map("expense_id") // e.g. "EXP-2026-001"
+  projectId       String    @map("project_id")
+  project         Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  expenseCategory String    @map("expense_category") 
+  // Employee Cost, Software Subscriptions, Cloud Hosting Expenses, Hardware Expenses, Third-Party Service, Miscellaneous
+  description     String
+  amount          Decimal   @db.Decimal(14, 2)
+  transactionDate DateTime  @map("transaction_date")
+  paymentMethod   String    @default("BANK_TRANSFER") @map("payment_method") // BANK_TRANSFER, UPI, CREDIT_CARD, CASH
+  vendor          String?
+  receiptUrl      String?   @map("receipt_url")
+  enteredById     String?   @map("entered_by_id")
+  enteredBy       User?     @relation("ExpenseEnteredBy", fields: [enteredById], references: [id])
+  approvalStatus  String    @default("PENDING") @map("approval_status") // PENDING, APPROVED, REJECTED
+  approvedById    String?   @map("approved_by_id")
+  approvedBy      User?     @relation("ExpenseApprovedBy", fields: [approvedById], references: [id])
+  approvalRemarks String?   @map("approval_remarks")
+  approvedAt      DateTime? @map("approved_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([projectId])
+  @@index([approvalStatus])
+  @@map("project_expenses")
+}
+
+// 16. Client Payments
+model ClientPayment {
+  id                   String   @id @default(uuid())
+  paymentId            String   @unique @map("payment_id") // e.g. "PAY-2026-001"
+  projectId            String   @map("project_id")
+  project              Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  invoiceNumber        String?  @map("invoice_number")
+  amount               Decimal  @db.Decimal(14, 2)
+  paymentDate          DateTime @map("payment_date")
+  paymentMethod        String   @default("NEFT_RTGS") @map("payment_method")
+  transactionReference String?  @map("transaction_reference")
+  status               String   @default("RECEIVED") // RECEIVED, PENDING_CLEARANCE, FAILED
+  notes                String?
+  receivedById         String?  @map("received_by_id")
+  receivedBy           User?    @relation("PaymentReceiver", fields: [receivedById], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([projectId])
+  @@map("client_payments")
+}
+
+// 17. Project Holds (History of hold periods)
+model ProjectHold {
+  id                   String    @id @default(uuid())
+  projectId            String    @map("project_id")
+  project              Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  holdReason           String    @map("hold_reason")
+  holdDate             DateTime  @default(now()) @map("hold_date")
+  currentProgressAtHold Int      @map("current_progress_at_hold")
+  pendingTasksSummary  String?   @map("pending_tasks_summary")
+  responsiblePersonId  String?   @map("responsible_person_id")
+  responsiblePerson    User?     @relation("HoldResponsible", fields: [responsiblePersonId], references: [id])
+  expectedResumeDate   DateTime? @map("expected_resume_date")
+  resumeDate           DateTime? @map("resume_date")
+  financialImpact      String?   @map("financial_impact")
+  remarks              String?
+  resumeRemarks        String?   @map("resume_remarks")
+  isActive             Boolean   @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([projectId])
+  @@map("project_holds")
+}
+
+// 18. Project Risks
+model ProjectRisk {
+  id                  String    @id @default(uuid())
+  projectId           String    @map("project_id")
+  project             Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title               String
+  description         String?
+  severity            String    @default("MEDIUM") // LOW, MEDIUM, HIGH, CRITICAL
+  probability         String    @default("MEDIUM") // LOW, MEDIUM, HIGH
+  impact              String?
+  responsiblePersonId String?   @map("responsible_person_id")
+  responsiblePerson   Employee? @relation("RiskResponsible", fields: [responsiblePersonId], references: [id])
+  mitigationPlan      String?   @map("mitigation_plan")
+  status              String    @default("IDENTIFIED") // IDENTIFIED, MITIGATING, RESOLVED, ACCEPTED
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([projectId])
+  @@map("project_risks")
+}
+
+// 19. Project Issues
+model ProjectIssue {
+  id          String   @id @default(uuid())
+  projectId   String   @map("project_id")
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  severity    String   @default("MEDIUM")
+  status      String   @default("OPEN") // OPEN, IN_PROGRESS, RESOLVED, CLOSED
+  reportedBy  String?  @map("reported_by")
+  resolution  String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([projectId])
+  @@map("project_issues")
+}
+
+// 20. Project Documents
+model ProjectDocument {
+  id           String   @id @default(uuid())
+  projectId    String   @map("project_id")
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  docType      String   @map("doc_type") 
+  // Project Proposal, Client Agreement, Requirement Document, SRS Document, Quotations, Invoices, Design Files, Technical Documents, Other
+  title        String
+  fileName     String   @map("file_name")
+  fileUrl      String   @map("file_url")
+  fileSize     Int?     @map("file_size")
+  fileType     String?  @map("file_type")
+  version      String   @default("v1.0")
+  uploadedById String?  @map("uploaded_by_id")
+  uploadedBy   User?    @relation("DocUploader", fields: [uploadedById], references: [id])
+  description  String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([projectId])
+  @@map("project_documents")
+}
+
+// 21. Project Activity Logs (Full audit timeline)
+model ProjectActivityLog {
+  id           String   @id @default(uuid())
+  projectId    String   @map("project_id")
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  activityType String   @map("activity_type")
+  description  String
+  userId       String?  @map("user_id")
+  user         User?    @relation("ActivityUser", fields: [userId], references: [id])
+  metadata     Json?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([projectId])
+  @@map("project_activity_logs")
+}
+
+// 22. Project Time Entries
+model ProjectTimeEntry {
+  id          String       @id @default(uuid())
+  projectId   String       @map("project_id")
+  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  taskId      String?      @map("task_id")
+  task        ProjectTask? @relation(fields: [taskId], references: [id], onDelete: SetNull)
+  employeeId  String       @map("employee_id")
+  employee    Employee     @relation("EmployeeTimeEntries", fields: [employeeId], references: [id])
+  date        DateTime     @default(now())
+  hoursSpent  Decimal      @map("hours_spent") @db.Decimal(6, 2)
+  description String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([projectId])
+  @@map("project_time_entries")
+}
+
+// 23. Notifications
+model Notification {
+  id               String   @id @default(uuid())
+  userId           String   @map("user_id")
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title            String
+  message          String
+  type             String   @default("INFO") // INFO, WARNING, SUCCESS, ALERT
+  relatedProjectId String?  @map("related_project_id")
+  isRead           Boolean  @default(false) @map("is_read")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@map("notifications")
+}
+
+// 24. Audit Logs (System-wide governance)
+model AuditLog {
+  id            String   @id @default(uuid())
+  entityType    String   @map("entity_type") // PROJECT, BUDGET, EXPENSE, STATUS, ASSIGNMENT, USER
+  entityId      String   @map("entity_id")
+  action        String   // CREATE, UPDATE, DELETE, ARCHIVE, APPROVE, REJECT, STATUS_CHANGE
+  performedById String?  @map("performed_by_id")
+  performedBy   User?    @relation("AuditUser", fields: [performedById], references: [id])
+  ipAddress     String?  @map("ip_address")
+  userAgent     String?  @map("user_agent")
+  changes       Json?
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@index([entityType, entityId])
+  @@map("audit_logs")
+}
+

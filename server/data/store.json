@@ -1,0 +1,1055 @@
+{
+  "users": [
+    {
+      "id": "usr-001",
+      "email": "admin@arshithgroup.com",
+      "passwordHash": "$2a$10$h1OS0DvVNehrL/snf0iEDu6WBanUgJDhTwocwq2IjH0tKGgkiQaMW",
+      "name": "Farook",
+      "roleName": "SUPER_ADMIN",
+      "department": "Executive Management",
+      "designation": "Managing Director & CEO",
+      "phone": "+91 98765 43210",
+      "isActive": true,
+      "employeeId": "EMP-0101",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "usr-002",
+      "email": "pm@arshith.com",
+      "passwordHash": "$2a$10$JSm5mv74p7fQs2d7IU5b6OSZ.NGuirDlav9KzxNvkMgUJ8LMREKbi",
+      "name": "Priya Sundaram",
+      "roleName": "PROJECT_MANAGER",
+      "department": "Project Delivery",
+      "designation": "Senior Project Manager",
+      "phone": "+91 98765 43211",
+      "isActive": true,
+      "employeeId": "EMP-0102",
+      "createdAt": "2026-01-05T00:00:00.000Z"
+    },
+    {
+      "id": "usr-003",
+      "email": "lead@arshith.com",
+      "passwordHash": "$2a$10$JSm5mv74p7fQs2d7IU5b6OSZ.NGuirDlav9KzxNvkMgUJ8LMREKbi",
+      "name": "Vikramaditya Rao",
+      "roleName": "TEAM_LEAD",
+      "department": "Engineering",
+      "designation": "Technical Architect & Lead",
+      "phone": "+91 98765 43212",
+      "isActive": true,
+      "employeeId": "EMP-0103",
+      "createdAt": "2026-01-10T00:00:00.000Z"
+    },
+    {
+      "id": "usr-004",
+      "email": "dev@arshith.com",
+      "passwordHash": "$2a$10$JSm5mv74p7fQs2d7IU5b6OSZ.NGuirDlav9KzxNvkMgUJ8LMREKbi",
+      "name": "Ananya Deshmukh",
+      "roleName": "EMPLOYEE",
+      "department": "Engineering",
+      "designation": "Senior Full Stack Developer",
+      "phone": "+91 98765 43213",
+      "isActive": true,
+      "employeeId": "EMP-0104",
+      "createdAt": "2026-01-15T00:00:00.000Z"
+    },
+    {
+      "id": "usr-005",
+      "email": "finance@arshith.com",
+      "passwordHash": "$2a$10$JSm5mv74p7fQs2d7IU5b6OSZ.NGuirDlav9KzxNvkMgUJ8LMREKbi",
+      "name": "Rajesh Kulkarni",
+      "roleName": "FINANCE_MANAGER",
+      "department": "Finance & Accounts",
+      "designation": "Head of Financial Operations",
+      "phone": "+91 98765 43214",
+      "isActive": true,
+      "employeeId": "EMP-0105",
+      "createdAt": "2026-01-12T00:00:00.000Z"
+    },
+    {
+      "id": "usr-006",
+      "email": "admin@codelekho.com",
+      "passwordHash": "$2a$10$JtmfhbX2VhupzwaZU.OZh.XLjO0rEK/j9UMXVKZZqAuVRsfKnMjJi",
+      "name": "Farook",
+      "roleName": "SUPER_ADMIN",
+      "department": "CodeLekho Academic ERP",
+      "designation": "Director & ERP Administrator",
+      "phone": "+91 98765 43210",
+      "isActive": true,
+      "employeeId": "CLK-0001",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "usr-007",
+      "email": "admin@arshithfresh.com",
+      "passwordHash": "/snf0iEDu6WBanUgJDhTwocwq2IjH0tKGgkiQaMW",
+      "name": "Farook",
+      "roleName": "SUPER_ADMIN",
+      "department": "Arshith Fresh Supply Chain",
+      "designation": "Managing Director & Supply Chain Admin",
+      "phone": "+91 98765 43210",
+      "isActive": true,
+      "employeeId": "AF-0001",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    }
+  ],
+  "employees": [
+    {
+      "id": "emp-001",
+      "empId": "EMP-0101",
+      "name": "Farook",
+      "email": "admin@arshithgroup.com",
+      "phone": "+91 98765 43210",
+      "department": "Executive Management",
+      "designation": "Managing Director & CEO",
+      "skills": [
+        "Strategic Planning",
+        "Enterprise Architecture",
+        "Portfolio Management",
+        "Executive Leadership"
+      ],
+      "experienceYears": 16,
+      "joinDate": "2020-01-01",
+      "hourlyRate": 3500,
+      "maxActiveProjects": 10,
+      "status": "ACTIVE",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "emp-002",
+      "empId": "EMP-0102",
+      "name": "Priya Sundaram",
+      "email": "pm@arshith.com",
+      "phone": "+91 98765 43211",
+      "department": "Project Delivery",
+      "designation": "Senior Project Manager",
+      "skills": [
+        "Agile / Scrum",
+        "Risk Management",
+        "Stakeholder Communication",
+        "Budget Tracking",
+        "Jira"
+      ],
+      "experienceYears": 10,
+      "joinDate": "2021-03-15",
+      "hourlyRate": 2200,
+      "maxActiveProjects": 4,
+      "status": "ACTIVE",
+      "createdAt": "2026-01-05T00:00:00.000Z"
+    },
+    {
+      "id": "emp-003",
+      "empId": "EMP-0103",
+      "name": "Vikramaditya Rao",
+      "email": "lead@arshith.com",
+      "phone": "+91 98765 43212",
+      "department": "Engineering",
+      "designation": "Technical Architect & Lead",
+      "skills": [
+        "System Design",
+        "React.js",
+        "Node.js",
+        "PostgreSQL",
+        "Microservices",
+        "Kubernetes"
+      ],
+      "experienceYears": 9,
+      "joinDate": "2021-06-01",
+      "hourlyRate": 2000,
+      "maxActiveProjects": 3,
+      "status": "ACTIVE",
+      "createdAt": "2026-01-10T00:00:00.000Z"
+    },
+    {
+      "id": "emp-004",
+      "empId": "EMP-0104",
+      "name": "Ananya Deshmukh",
+      "email": "dev@arshith.com",
+      "phone": "+91 98765 43213",
+      "department": "Engineering",
+      "designation": "Senior Full Stack Developer",
+      "skills": [
+        "React.js",
+        "Vite",
+        "Tailwind CSS",
+        "TypeScript",
+        "Express.js",
+        "Prisma ORM"
+      ],
+      "experienceYears": 6,
+      "joinDate": "2022-02-10",
+      "hourlyRate": 1600,
+      "maxActiveProjects": 2,
+      "status": "ACTIVE",
+      "createdAt": "2026-01-15T00:00:00.000Z"
+    },
+    {
+      "id": "emp-005",
+      "empId": "EMP-0105",
+      "name": "Rajesh Kulkarni",
+      "email": "finance@arshith.com",
+      "phone": "+91 98765 43214",
+      "department": "Finance & Accounts",
+      "designation": "Head of Financial Operations",
+      "skills": [
+        "Financial Modeling",
+        "Cost Auditing",
+        "Budget Analysis",
+        "Taxation & Invoicing"
+      ],
+      "experienceYears": 12,
+      "joinDate": "2021-01-15",
+      "hourlyRate": 1800,
+      "maxActiveProjects": 5,
+      "status": "ACTIVE",
+      "createdAt": "2026-01-12T00:00:00.000Z"
+    },
+    {
+      "id": "emp-006",
+      "empId": "EMP-0106",
+      "name": "Karthik Nair",
+      "email": "karthik.n@arshith.com",
+      "phone": "+91 98765 43215",
+      "department": "Engineering",
+      "designation": "Backend Developer",
+      "skills": [
+        "Node.js",
+        "PostgreSQL",
+        "Redis",
+        "GraphQL",
+        "Docker",
+        "RESTful APIs"
+      ],
+      "experienceYears": 5,
+      "joinDate": "2022-08-01",
+      "hourlyRate": 1400,
+      "maxActiveProjects": 3,
+      "status": "ACTIVE",
+      "createdAt": "2026-02-01T00:00:00.000Z"
+    },
+    {
+      "id": "emp-007",
+      "empId": "EMP-0107",
+      "name": "Sneha Patel",
+      "email": "sneha.p@arshith.com",
+      "phone": "+91 98765 43216",
+      "department": "Design",
+      "designation": "UI/UX Design Specialist",
+      "skills": [
+        "Figma",
+        "Design Systems",
+        "User Research",
+        "Wireframing",
+        "Prototyping"
+      ],
+      "experienceYears": 5,
+      "joinDate": "2022-10-15",
+      "hourlyRate": 1500,
+      "maxActiveProjects": 3,
+      "status": "ACTIVE",
+      "createdAt": "2026-02-10T00:00:00.000Z"
+    },
+    {
+      "id": "emp-008",
+      "empId": "EMP-0108",
+      "name": "Rohan Verma",
+      "email": "rohan.v@arshith.com",
+      "phone": "+91 98765 43217",
+      "department": "QA & Testing",
+      "designation": "Lead QA Automation Engineer",
+      "skills": [
+        "Cypress",
+        "Playwright",
+        "Jest",
+        "API Testing",
+        "Performance Profiling",
+        "Selenium"
+      ],
+      "experienceYears": 6,
+      "joinDate": "2023-01-10",
+      "hourlyRate": 1300,
+      "maxActiveProjects": 4,
+      "status": "ACTIVE",
+      "createdAt": "2026-02-15T00:00:00.000Z"
+    },
+    {
+      "id": "emp-009",
+      "empId": "EMP-0109",
+      "name": "Meera Iyer",
+      "email": "meera.i@arshith.com",
+      "phone": "+91 98765 43218",
+      "department": "DevOps & Cloud",
+      "designation": "DevOps & Security Specialist",
+      "skills": [
+        "AWS",
+        "Terraform",
+        "CI/CD Pipelines",
+        "Docker",
+        "Kubernetes",
+        "Security Hardening"
+      ],
+      "experienceYears": 7,
+      "joinDate": "2023-03-01",
+      "hourlyRate": 1900,
+      "maxActiveProjects": 4,
+      "status": "ACTIVE",
+      "createdAt": "2026-02-20T00:00:00.000Z"
+    },
+    {
+      "id": "emp-010",
+      "empId": "EMP-0110",
+      "name": "Amitabh Sen",
+      "email": "amitabh.s@arshith.com",
+      "phone": "+91 98765 43219",
+      "department": "Data & AI",
+      "designation": "Machine Learning Engineer",
+      "skills": [
+        "Python",
+        "PyTorch",
+        "FastAPI",
+        "LangChain",
+        "Vector DBs",
+        "Model Fine-tuning"
+      ],
+      "experienceYears": 4,
+      "joinDate": "2023-07-01",
+      "hourlyRate": 1700,
+      "maxActiveProjects": 2,
+      "status": "ACTIVE",
+      "createdAt": "2026-03-01T00:00:00.000Z"
+    }
+  ],
+  "clients": [
+    {
+      "id": "cli-1794554809078",
+      "clientId": "CLI-9078",
+      "companyName": "Arshith Group",
+      "contactPerson": "Farook",
+      "email": "arshithgroup@gmail.com",
+      "phone": "9884479760",
+      "notes": "Auto-created via Project Registration form",
+      "createdAt": "2026-11-13T07:26:49.078Z",
+      "updatedAt": "2026-11-13T07:26:49.078Z"
+    },
+    {
+      "id": "cli-1794553294508",
+      "clientId": "CLI-4508",
+      "companyName": "Arshith Group",
+      "contactPerson": "Farook",
+      "email": "arshithgroup@gmail.com",
+      "phone": "9883389760",
+      "notes": "Auto-created via Project Registration form",
+      "createdAt": "2026-11-13T07:01:34.508Z",
+      "updatedAt": "2026-11-13T07:01:34.508Z"
+    }
+  ],
+  "categories": [
+    {
+      "id": "cat-001",
+      "name": "Enterprise Web Application",
+      "description": "Scalable cloud-native enterprise web portals"
+    },
+    {
+      "id": "cat-002",
+      "name": "FinTech & Banking Solutions",
+      "description": "PCI-DSS compliant payment, lending and ledger systems"
+    },
+    {
+      "id": "cat-003",
+      "name": "Healthcare & Telemedicine",
+      "description": "Medical records, diagnostics and patient management systems"
+    },
+    {
+      "id": "cat-004",
+      "name": "Supply Chain & Logistics",
+      "description": "ERP, tracking, warehousing and fleet dispatch"
+    },
+    {
+      "id": "cat-005",
+      "name": "AI & Machine Learning Solutions",
+      "description": "Computer vision, NLP pipelines and predictive analytics"
+    },
+    {
+      "id": "cat-006",
+      "name": "Smart City & Public Infrastructure",
+      "description": "IoT sensor telematics and municipal citizen portals"
+    }
+  ],
+  "projects": [],
+  "assignments": [],
+  "statusHistory": [],
+  "tasks": [],
+  "milestones": [],
+  "expenses": [],
+  "clientPayments": [],
+  "holds": [],
+  "risks": [],
+  "documents": [],
+  "notifications": [
+    {
+      "id": "not-1794554809084",
+      "userId": "usr-001",
+      "title": "New Project Registered",
+      "message": "Project AIP-2026-002 (Arshith Connect) has been registered with status NEW.",
+      "type": "INFO",
+      "relatedProjectId": "pro-1794554809080",
+      "isRead": false,
+      "createdAt": "2026-11-13T07:26:49.084Z",
+      "updatedAt": "2026-11-13T07:26:49.084Z"
+    },
+    {
+      "id": "not-1794553294518",
+      "userId": "usr-001",
+      "title": "New Project Registered",
+      "message": "Project AIP-2026-001 (Arshith Connect) has been registered with status NEW.",
+      "type": "INFO",
+      "relatedProjectId": "pro-1794553294510",
+      "isRead": false,
+      "createdAt": "2026-11-13T07:01:34.518Z",
+      "updatedAt": "2026-11-13T07:01:34.518Z"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "aud-1795008931046",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-18T13:35:31.046Z"
+      },
+      "createdAt": "2026-11-18T13:35:31.046Z",
+      "updatedAt": "2026-11-18T13:35:31.046Z"
+    },
+    {
+      "id": "aud-1795007612288",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-1795007612284",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0111",
+        "name": "Test QA Engineer",
+        "deletedAt": "2026-11-18T13:13:32.288Z"
+      },
+      "createdAt": "2026-11-18T13:13:32.288Z",
+      "updatedAt": "2026-11-18T13:13:32.288Z"
+    },
+    {
+      "id": "aud-1795007612284",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-1795007612284",
+      "action": "CREATE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0111",
+        "name": "Test QA Engineer",
+        "department": "Engineering",
+        "designation": "QA Automation Lead"
+      },
+      "createdAt": "2026-11-18T13:13:32.284Z",
+      "updatedAt": "2026-11-18T13:13:32.284Z"
+    },
+    {
+      "id": "aud-1795007612269",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-18T13:13:32.269Z"
+      },
+      "createdAt": "2026-11-18T13:13:32.269Z",
+      "updatedAt": "2026-11-18T13:13:32.269Z"
+    },
+    {
+      "id": "aud-1795007563803",
+      "entityType": "USER",
+      "entityId": "usr-006",
+      "action": "LOGIN",
+      "performedById": "usr-006",
+      "changes": {
+        "loginTime": "2026-11-18T13:12:43.803Z"
+      },
+      "createdAt": "2026-11-18T13:12:43.803Z",
+      "updatedAt": "2026-11-18T13:12:43.803Z"
+    },
+    {
+      "id": "aud-1795007563800",
+      "entityType": "USER",
+      "entityId": "usr-007",
+      "action": "LOGIN",
+      "performedById": "usr-007",
+      "changes": {
+        "loginTime": "2026-11-18T13:12:43.800Z"
+      },
+      "createdAt": "2026-11-18T13:12:43.800Z",
+      "updatedAt": "2026-11-18T13:12:43.800Z"
+    },
+    {
+      "id": "aud-1795007563797",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-18T13:12:43.797Z"
+      },
+      "createdAt": "2026-11-18T13:12:43.797Z",
+      "updatedAt": "2026-11-18T13:12:43.797Z"
+    },
+    {
+      "id": "aud-1795007563792",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-18T13:12:43.791Z"
+      },
+      "createdAt": "2026-11-18T13:12:43.792Z",
+      "updatedAt": "2026-11-18T13:12:43.792Z"
+    },
+    {
+      "id": "aud-1795007212801",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-18T13:06:52.801Z"
+      },
+      "createdAt": "2026-11-18T13:06:52.801Z",
+      "updatedAt": "2026-11-18T13:06:52.801Z"
+    },
+    {
+      "id": "aud-1795004064853",
+      "entityType": "USER",
+      "entityId": "usr-007",
+      "action": "LOGIN",
+      "performedById": "usr-007",
+      "changes": {
+        "loginTime": "2026-11-18T12:14:24.853Z"
+      },
+      "createdAt": "2026-11-18T12:14:24.853Z",
+      "updatedAt": "2026-11-18T12:14:24.853Z"
+    },
+    {
+      "id": "aud-1795004064847",
+      "entityType": "USER",
+      "entityId": "usr-006",
+      "action": "LOGIN",
+      "performedById": "usr-006",
+      "changes": {
+        "loginTime": "2026-11-18T12:14:24.847Z"
+      },
+      "createdAt": "2026-11-18T12:14:24.847Z",
+      "updatedAt": "2026-11-18T12:14:24.847Z"
+    },
+    {
+      "id": "aud-1795004064826",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-18T12:14:24.826Z"
+      },
+      "createdAt": "2026-11-18T12:14:24.826Z",
+      "updatedAt": "2026-11-18T12:14:24.826Z"
+    },
+    {
+      "id": "aud-1794994089637",
+      "entityType": "USER",
+      "entityId": "usr-006",
+      "action": "LOGIN",
+      "performedById": "usr-006",
+      "changes": {
+        "loginTime": "2026-11-18T09:28:09.637Z"
+      },
+      "createdAt": "2026-11-18T09:28:09.637Z",
+      "updatedAt": "2026-11-18T09:28:09.637Z"
+    },
+    {
+      "id": "aud-1794986056295",
+      "entityType": "USER",
+      "entityId": "usr-006",
+      "action": "LOGIN",
+      "performedById": "usr-006",
+      "changes": {
+        "loginTime": "2026-11-18T07:14:16.295Z"
+      },
+      "createdAt": "2026-11-18T07:14:16.295Z",
+      "updatedAt": "2026-11-18T07:14:16.295Z"
+    },
+    {
+      "id": "aud-1794985848100",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-18T07:10:48.100Z"
+      },
+      "createdAt": "2026-11-18T07:10:48.100Z",
+      "updatedAt": "2026-11-18T07:10:48.100Z"
+    },
+    {
+      "id": "aud-1794985837125",
+      "entityType": "USER",
+      "entityId": "usr-006",
+      "action": "LOGIN",
+      "performedById": "usr-006",
+      "changes": {
+        "loginTime": "2026-11-18T07:10:37.125Z"
+      },
+      "createdAt": "2026-11-18T07:10:37.125Z",
+      "updatedAt": "2026-11-18T07:10:37.125Z"
+    },
+    {
+      "id": "aud-1794985837106",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-18T07:10:37.106Z"
+      },
+      "createdAt": "2026-11-18T07:10:37.106Z",
+      "updatedAt": "2026-11-18T07:10:37.106Z"
+    },
+    {
+      "id": "aud-1794587360359",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-13T16:29:20.359Z"
+      },
+      "createdAt": "2026-11-13T16:29:20.359Z",
+      "updatedAt": "2026-11-13T16:29:20.359Z"
+    },
+    {
+      "id": "aud-1794576271651",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-13T13:24:31.650Z"
+      },
+      "createdAt": "2026-11-13T13:24:31.651Z",
+      "updatedAt": "2026-11-13T13:24:31.651Z"
+    },
+    {
+      "id": "aud-1794575301147",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-13T13:08:21.147Z"
+      },
+      "createdAt": "2026-11-13T13:08:21.148Z",
+      "updatedAt": "2026-11-13T13:08:21.148Z"
+    },
+    {
+      "id": "aud-1794560813754",
+      "entityType": "PROJECT",
+      "entityId": "pro-1794554809080",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "projectId": "AIP-2026-002",
+        "title": "Arshith Connect",
+        "reason": "Permanently deleted by Admin",
+        "deletedAt": "2026-11-13T09:06:53.754Z"
+      },
+      "createdAt": "2026-11-13T09:06:53.754Z",
+      "updatedAt": "2026-11-13T09:06:53.754Z"
+    },
+    {
+      "id": "aud-1794560771291",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-1794560771272",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0111",
+        "name": "Temporary Deletion Test Employee",
+        "deletedAt": "2026-11-13T09:06:11.291Z"
+      },
+      "createdAt": "2026-11-13T09:06:11.291Z",
+      "updatedAt": "2026-11-13T09:06:11.291Z"
+    },
+    {
+      "id": "aud-1794560771275",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-1794560771272",
+      "action": "CREATE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0111",
+        "name": "Temporary Deletion Test Employee",
+        "department": "Engineering",
+        "designation": "Intern"
+      },
+      "createdAt": "2026-11-13T09:06:11.275Z",
+      "updatedAt": "2026-11-13T09:06:11.275Z"
+    },
+    {
+      "id": "aud-1794560771225",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-13T09:06:11.221Z"
+      },
+      "createdAt": "2026-11-13T09:06:11.225Z",
+      "updatedAt": "2026-11-13T09:06:11.225Z"
+    },
+    {
+      "id": "aud-1794560597407",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-1794560597355",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0101",
+        "name": "Temporary Test Staff",
+        "deletedAt": "2026-11-13T09:03:17.406Z"
+      },
+      "createdAt": "2026-11-13T09:03:17.407Z",
+      "updatedAt": "2026-11-13T09:03:17.407Z"
+    },
+    {
+      "id": "aud-1794560597391",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-1794560597355",
+      "action": "CREATE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0101",
+        "name": "Temporary Test Staff",
+        "department": "Engineering",
+        "designation": "Junior Developer"
+      },
+      "createdAt": "2026-11-13T09:03:17.391Z",
+      "updatedAt": "2026-11-13T09:03:17.391Z"
+    },
+    {
+      "id": "aud-1794560597338",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-13T09:03:17.338Z"
+      },
+      "createdAt": "2026-11-13T09:03:17.338Z",
+      "updatedAt": "2026-11-13T09:03:17.338Z"
+    },
+    {
+      "id": "aud-1794560034059",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-010",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0110",
+        "name": "Amitabh Sen",
+        "deletedAt": "2026-11-13T08:53:54.059Z"
+      },
+      "createdAt": "2026-11-13T08:53:54.059Z",
+      "updatedAt": "2026-11-13T08:53:54.059Z"
+    },
+    {
+      "id": "aud-1794560032022",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-009",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0109",
+        "name": "Meera Iyer",
+        "deletedAt": "2026-11-13T08:53:52.022Z"
+      },
+      "createdAt": "2026-11-13T08:53:52.022Z",
+      "updatedAt": "2026-11-13T08:53:52.022Z"
+    },
+    {
+      "id": "aud-1794560030016",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-008",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0108",
+        "name": "Rohan Verma",
+        "deletedAt": "2026-11-13T08:53:50.016Z"
+      },
+      "createdAt": "2026-11-13T08:53:50.016Z",
+      "updatedAt": "2026-11-13T08:53:50.016Z"
+    },
+    {
+      "id": "aud-1794560027914",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-007",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0107",
+        "name": "Sneha Patel",
+        "deletedAt": "2026-11-13T08:53:47.914Z"
+      },
+      "createdAt": "2026-11-13T08:53:47.914Z",
+      "updatedAt": "2026-11-13T08:53:47.914Z"
+    },
+    {
+      "id": "aud-1794560026292",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-006",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0106",
+        "name": "Karthik Nair",
+        "deletedAt": "2026-11-13T08:53:46.292Z"
+      },
+      "createdAt": "2026-11-13T08:53:46.292Z",
+      "updatedAt": "2026-11-13T08:53:46.292Z"
+    },
+    {
+      "id": "aud-1794560024426",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-005",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0105",
+        "name": "Rajesh Kulkarni",
+        "deletedAt": "2026-11-13T08:53:44.426Z"
+      },
+      "createdAt": "2026-11-13T08:53:44.426Z",
+      "updatedAt": "2026-11-13T08:53:44.426Z"
+    },
+    {
+      "id": "aud-1794560022398",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-004",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0104",
+        "name": "Ananya Deshmukh",
+        "deletedAt": "2026-11-13T08:53:42.398Z"
+      },
+      "createdAt": "2026-11-13T08:53:42.398Z",
+      "updatedAt": "2026-11-13T08:53:42.398Z"
+    },
+    {
+      "id": "aud-1794560020515",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-002",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0102",
+        "name": "Priya Sundaram",
+        "deletedAt": "2026-11-13T08:53:40.515Z"
+      },
+      "createdAt": "2026-11-13T08:53:40.515Z",
+      "updatedAt": "2026-11-13T08:53:40.515Z"
+    },
+    {
+      "id": "aud-1794560018565",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-003",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0103",
+        "name": "Vikramaditya Rao",
+        "deletedAt": "2026-11-13T08:53:38.565Z"
+      },
+      "createdAt": "2026-11-13T08:53:38.565Z",
+      "updatedAt": "2026-11-13T08:53:38.565Z"
+    },
+    {
+      "id": "aud-1794560016536",
+      "entityType": "EMPLOYEE",
+      "entityId": "emp-001",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "empId": "EMP-0101",
+        "name": "Arshith Sharma",
+        "deletedAt": "2026-11-13T08:53:36.536Z"
+      },
+      "createdAt": "2026-11-13T08:53:36.536Z",
+      "updatedAt": "2026-11-13T08:53:36.536Z"
+    },
+    {
+      "id": "aud-1794559411104",
+      "entityType": "PROJECT",
+      "entityId": "pro-1794554809080",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "projectId": "AIP-2026-002",
+        "title": "Arshith Connect",
+        "reason": "Permanently deleted by Admin",
+        "deletedAt": "2026-11-13T08:43:31.104Z"
+      },
+      "createdAt": "2026-11-13T08:43:31.104Z",
+      "updatedAt": "2026-11-13T08:43:31.105Z"
+    },
+    {
+      "id": "aud-1794559405109",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-13T08:43:25.109Z"
+      },
+      "createdAt": "2026-11-13T08:43:25.109Z",
+      "updatedAt": "2026-11-13T08:43:25.109Z"
+    },
+    {
+      "id": "aud-1794556360045",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-13T07:52:40.044Z"
+      },
+      "createdAt": "2026-11-13T07:52:40.045Z",
+      "updatedAt": "2026-11-13T07:52:40.045Z"
+    },
+    {
+      "id": "aud-1794556276613",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-13T07:51:16.613Z"
+      },
+      "createdAt": "2026-11-13T07:51:16.613Z",
+      "updatedAt": "2026-11-13T07:51:16.613Z"
+    },
+    {
+      "id": "aud-1794556263556",
+      "entityType": "ASSIGNMENT",
+      "entityId": "ass-1794556263555",
+      "action": "ASSIGN",
+      "performedById": "usr-001",
+      "changes": {
+        "projectId": "pro-1794554809080",
+        "employeeId": "emp-002",
+        "projectRole": "Project Manager",
+        "allocationPercentage": 50,
+        "warning": null
+      },
+      "createdAt": "2026-11-13T07:51:03.556Z",
+      "updatedAt": "2026-11-13T07:51:03.556Z"
+    },
+    {
+      "id": "aud-1794556263549",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-13T07:51:03.549Z"
+      },
+      "createdAt": "2026-11-13T07:51:03.549Z",
+      "updatedAt": "2026-11-13T07:51:03.549Z"
+    },
+    {
+      "id": "aud-1794556244959",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-13T07:50:44.954Z"
+      },
+      "createdAt": "2026-11-13T07:50:44.959Z",
+      "updatedAt": "2026-11-13T07:50:44.959Z"
+    },
+    {
+      "id": "aud-1794554818981",
+      "entityType": "PROJECT",
+      "entityId": "pro-1794553294510",
+      "action": "DELETE",
+      "performedById": "usr-001",
+      "changes": {
+        "projectId": "AIP-2026-001",
+        "title": "Arshith Connect",
+        "reason": "Permanently deleted by Admin",
+        "deletedAt": "2026-11-13T07:26:58.981Z"
+      },
+      "createdAt": "2026-11-13T07:26:58.981Z",
+      "updatedAt": "2026-11-13T07:26:58.981Z"
+    },
+    {
+      "id": "aud-1794554809083",
+      "entityType": "PROJECT",
+      "entityId": "pro-1794554809080",
+      "action": "CREATE",
+      "performedById": "usr-001",
+      "changes": {
+        "projectId": "AIP-2026-002",
+        "title": "Arshith Connect",
+        "budget": 60000
+      },
+      "createdAt": "2026-11-13T07:26:49.083Z",
+      "updatedAt": "2026-11-13T07:26:49.083Z"
+    },
+    {
+      "id": "aud-1794553294515",
+      "entityType": "PROJECT",
+      "entityId": "pro-1794553294510",
+      "action": "CREATE",
+      "performedById": "usr-001",
+      "changes": {
+        "projectId": "AIP-2026-001",
+        "title": "Arshith Connect",
+        "budget": 0
+      },
+      "createdAt": "2026-11-13T07:01:34.515Z",
+      "updatedAt": "2026-11-13T07:01:34.515Z"
+    },
+    {
+      "id": "aud-1794552668259",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-13T06:51:08.259Z"
+      },
+      "createdAt": "2026-11-13T06:51:08.260Z",
+      "updatedAt": "2026-11-13T06:51:08.260Z"
+    },
+    {
+      "id": "aud-1794488355674",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-12T12:59:15.674Z"
+      },
+      "createdAt": "2026-11-12T12:59:15.675Z",
+      "updatedAt": "2026-11-12T12:59:15.675Z"
+    }
+  ],
+  "taskComments": [],
+  "timeEntries": []
+}
