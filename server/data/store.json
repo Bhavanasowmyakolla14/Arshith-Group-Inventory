@@ -485,6 +485,18 @@
   ],
   "auditLogs": [
     {
+      "id": "aud-1795077709496",
+      "entityType": "USER",
+      "entityId": "usr-001",
+      "action": "LOGIN",
+      "performedById": "usr-001",
+      "changes": {
+        "loginTime": "2026-11-19T08:41:49.496Z"
+      },
+      "createdAt": "2026-11-19T08:41:49.496Z",
+      "updatedAt": "2026-11-19T08:41:49.496Z"
+    },
+    {
       "id": "aud-1795063202394",
       "entityType": "ASSIGNMENT",
       "entityId": "ass-1795063202392",
