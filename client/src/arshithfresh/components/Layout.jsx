@@ -296,19 +296,19 @@ export default function Layout() {
 
           {/* Right Controls */}
           <div className="flex items-center gap-3">
-            {/* Telemetry pill matching Arshith Infotech */}
-            <div className="hidden xl:flex items-center gap-2 px-3 py-1 bg-blue-50/80 border border-blue-200/80 rounded-full text-[11px] font-semibold text-blue-800">
-              <span className="w-2 h-2 rounded-full bg-[#2563EB] animate-pulse"></span>
-              <span>Live Core • Production</span>
+            {/* Telemetry pill: Live Warehouse Stock */}
+            <div className="hidden xl:flex items-center gap-2 px-3 py-1 bg-emerald-50/80 border border-emerald-200/80 rounded-full text-[11px] font-semibold text-emerald-800">
+              <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+              <span>Live Stock • Main Warehouse</span>
             </div>
 
-            {/* Quick Action Button matching Image */}
+            {/* Quick Action Button: New Product */}
             <Link
               to="/products"
               className="flex items-center gap-1.5 px-3.5 py-2 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-lg text-xs font-semibold shadow-xs hover:shadow transition-all cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
-              <span>New Project</span>
+              <span>New Product</span>
             </Link>
 
             {/* UNIFIED COMPANY SELECTION DROPDOWN (NOT SIDE BY SIDE) */}

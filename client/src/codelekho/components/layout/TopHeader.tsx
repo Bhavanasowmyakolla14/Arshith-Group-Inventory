@@ -5,6 +5,7 @@ import {
   Plus, 
   Shield, 
   LogOut, 
+  GraduationCap,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { useAuth } from '../../../context/AuthContext';
@@ -23,7 +24,7 @@ export const TopHeader: React.FC = () => {
 
   return (
     <header className="h-16 bg-white border-b border-[#E2E8F0] px-6 flex items-center justify-between sticky top-0 z-20 shadow-xs">
-      {/* Search Input matching Arshith Infotech */}
+      {/* Search Input: Academic & LMS Domain */}
       <div className="flex items-center gap-4 flex-1 max-w-md">
         <div 
           onClick={() => setGlobalSearchOpen(true)}
@@ -33,7 +34,7 @@ export const TopHeader: React.FC = () => {
           <input
             type="text"
             readOnly
-            placeholder="Search projects by ID, title, client, or tech stack..."
+            placeholder="Search courses, students, exams, or tracks..."
             className="w-full pl-9 pr-12 py-2 text-xs bg-[#F5F7FA] border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-[#2563EB] focus:bg-white transition-all text-[#111827] placeholder-[#64748B] cursor-pointer"
           />
           <kbd className="hidden sm:inline-flex items-center gap-0.5 absolute right-2.5 top-1/2 -translate-y-1/2 px-1.5 py-0.5 text-[10px] font-mono text-[#64748B] bg-white border border-[#E2E8F0] rounded shadow-2xs">
@@ -45,18 +46,18 @@ export const TopHeader: React.FC = () => {
       {/* Right Controls */}
       <div className="flex items-center gap-3">
         {/* System telemetry indicator */}
-        <div className="hidden xl:flex items-center gap-2 px-3 py-1 bg-blue-50/80 border border-blue-200/80 rounded-full text-[11px] font-semibold text-blue-800">
-          <span className="w-2 h-2 rounded-full bg-[#2563EB] animate-pulse"></span>
-          <span>Live Core • Production</span>
+        <div className="hidden xl:flex items-center gap-2 px-3 py-1 bg-indigo-50/80 border border-indigo-200/80 rounded-full text-[11px] font-semibold text-indigo-800">
+          <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
+          <span>Live LMS • Academic Core</span>
         </div>
 
-        {/* Quick Action Button: New Course / Project */}
+        {/* Quick Action Button: New Course / Student Registration */}
         <button
           onClick={() => setIsAddCourseModalOpen(true)}
           className="flex items-center gap-1.5 px-3.5 py-2 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-lg text-xs font-semibold shadow-xs hover:shadow transition-all cursor-pointer"
         >
           <Plus className="w-3.5 h-3.5" />
-          <span>New Project</span>
+          <span>New Course</span>
         </button>
 
         {/* Company Dropdown Selector (Unified) */}
@@ -85,7 +86,7 @@ export const TopHeader: React.FC = () => {
                 <span className="text-[10px] bg-slate-100 text-slate-600 font-semibold px-2 py-0.5 rounded-full">0 new</span>
               </div>
               <div className="p-6 text-center text-xs text-slate-400">
-                No new system notifications (0 total).
+                No new academic notifications (0 total).
               </div>
               <div className="p-2 border-t border-slate-100 text-center">
                 <button 
@@ -109,7 +110,7 @@ export const TopHeader: React.FC = () => {
           </div>
           <div className="hidden md:block text-left">
             <div className="text-xs font-bold text-[#111827] leading-tight">{user?.name || 'Farook'}</div>
-            <div className="text-[10px] text-[#64748B] font-medium">{user?.designation || 'Director & ERP Administrator'}</div>
+            <div className="text-[10px] text-[#64748B] font-medium">{user?.designation || 'Academic Director & ERP Administrator'}</div>
           </div>
 
           {/* Logout Button */}

@@ -13,20 +13,15 @@ import {
   TrendingUp, 
   FileCheck, 
   GraduationCap, 
-  CalendarClock, 
   ShieldCheck, 
   Award, 
   BarChart3, 
-  PieChart, 
   Coins, 
   Bell, 
   UserCog, 
   KeyRound, 
   Settings, 
-  LogOut, 
-  ChevronRight,
   Activity,
-  Layers,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { useAuth } from '../../../context/AuthContext';
@@ -68,20 +63,29 @@ export const Sidebar: React.FC = () => {
       ]
     },
     {
-      groupTitle: 'Operations & Execution',
+      groupTitle: 'Career Tracks & Curriculum',
       items: [
+        { id: 'python-track', label: 'Python Track', icon: Terminal },
+        { id: 'sql-databases', label: 'SQL & Databases', icon: Database },
+        { id: 'web-development', label: 'Web Development', icon: Globe },
+        { id: 'ai-data-science', label: 'AI & Data Science', icon: BrainCircuit, badge: 'NEW', badgeColor: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' },
         { id: 'practice-problems', label: 'Practice Problems', icon: Code2, badge: practiceProblemsSummary.totalCount.toString() },
         { id: 'question-bank', label: 'Question Bank', icon: HelpCircle },
-        { id: 'course-progress', label: 'Course Progress', icon: TrendingUp },
-        { id: 'assignments', label: 'Assignments', icon: FileCheck },
-        { id: 'proctoring', label: 'Proctoring & Exams', icon: ShieldCheck, badge: 'Live', badgeColor: 'bg-rose-500/20 text-rose-300 border border-rose-500/30' },
+      ]
+    },
+    {
+      groupTitle: 'Exams & Certifications',
+      items: [
+        { id: 'proctoring', label: '45-Min Proctored Exam', icon: ShieldCheck, badge: 'Live', badgeColor: 'bg-rose-500/20 text-rose-300 border border-rose-500/30' },
+        { id: 'course-progress', label: 'Course Progress & Tests', icon: TrendingUp },
+        { id: 'assignments', label: 'Student Assignments', icon: FileCheck },
         { id: 'certificates', label: 'QR Certificates', icon: Award, badge: certificates.length.toString() },
       ]
     },
     {
-      groupTitle: 'Finance & Governance',
+      groupTitle: 'Finance & Analytics',
       items: [
-        { id: 'financial-management', label: 'Budget & Spend (₹)', icon: Coins },
+        { id: 'financial-management', label: 'Tuition & Grants (₹)', icon: Coins },
         { id: 'student-analytics', label: 'Student Analytics', icon: BarChart3 },
         { id: 'learning-analytics', label: 'Learning Analytics', icon: Activity },
         { id: 'growth-analytics', label: 'Growth & Cohorts', icon: TrendingUp },
@@ -91,7 +95,7 @@ export const Sidebar: React.FC = () => {
       groupTitle: 'Administration',
       items: [
         { id: 'notifications', label: 'Alerts & Notifications', icon: Bell },
-        { id: 'user-management', label: 'Access Control', icon: UserCog },
+        { id: 'user-management', label: 'User Management', icon: UserCog },
         { id: 'roles-permissions', label: 'Roles & Permissions', icon: KeyRound },
         { id: 'settings', label: 'Platform Settings', icon: Settings },
       ]
@@ -163,17 +167,17 @@ export const Sidebar: React.FC = () => {
         ))}
       </div>
 
-      {/* Sidebar Footer matching Arshith Infotech */}
+      {/* Sidebar Footer */}
       <div className="p-3 border-t border-[#1E293B] bg-[#0B0F19]/60">
         <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono">
           <div className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
             <span>Cloud Sync Active</span>
           </div>
           <span className="text-slate-500">v2.4.0</span>
         </div>
         <div className="text-[9px] text-slate-500 font-mono mt-1">
-          External Enterprise Mode • 2026
+          Academic Enterprise Mode • 2026
         </div>
       </div>
     </aside>
